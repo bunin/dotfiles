@@ -1,0 +1,30 @@
+{
+  "security": {
+    "auth": {
+      "selectedType": "oauth-personal"
+    }
+  },
+  "model": {
+    "name": "auto-gemini-2.5"
+  },
+  "general": {
+    "previewFeatures": true,
+    "vimMode": true,
+    "preferredEditor": "nvim",
+    "enableAutoUpdate": false,
+    "sessionRetention": {
+      "enabled": true
+    },
+    "enablePromptCompletion": true
+  },
+  "ui": {
+    "showStatusInTitle": true,
+    "footer": {
+      "hideContextPercentage": false
+    },
+    "showMemoryUsage": true,
+    "showLineNumbers": true,
+    "showModelInfoInChat": true,
+    "showHomeDirectoryWarning": false
+  }
+}
