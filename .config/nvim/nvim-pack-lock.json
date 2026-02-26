@@ -1,0 +1,36 @@
+{
+  "plugins": {
+    "fzf-lua": {
+      "rev": "cfc085749d9232373fc6d8cf3a964c5601a7816e",
+      "src": "git@github.com:ibhagwan/fzf-lua.git"
+    },
+    "gitsigns.nvim": {
+      "rev": "9f3c6dd7868bcc116e9c1c1929ce063b978fa519",
+      "src": "git@github.com:lewis6991/gitsigns.nvim.git"
+    },
+    "go.nvim": {
+      "rev": "421694ad11759ad22d5200cff6a8c69d223ade29",
+      "src": "git@github.com:ray-x/go.nvim.git"
+    },
+    "guihua.lua": {
+      "rev": "ef44ba40f12e56c1c9fa45967f2b4d142e4b97a0",
+      "src": "git@github.com:ray-x/guihua.lua.git"
+    },
+    "nvim-lspconfig": {
+      "rev": "f386df19b145607a33885b6110ef5c04faae42cb",
+      "src": "git@github.com:neovim/nvim-lspconfig.git"
+    },
+    "nvim-treesitter": {
+      "rev": "957f86ae3f049ab6681ed64c05b05768fcaed0d2",
+      "src": "git@github.com:nvim-treesitter/nvim-treesitter.git"
+    },
+    "tiny-code-action.nvim": {
+      "rev": "8e72efa075ba3154bbc4c7d1db532b03b4e68373",
+      "src": "git@github.com:rachartier/tiny-code-action.nvim.git"
+    },
+    "which-key.nvim": {
+      "rev": "3aab2147e74890957785941f0c1ad87d0a44c15a",
+      "src": "git@github.com:folke/which-key.nvim.git"
+    }
+  }
+}
