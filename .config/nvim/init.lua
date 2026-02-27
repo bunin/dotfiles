@@ -9,6 +9,7 @@ vim.cmd.colorscheme('lunaperche')
 
 -- Plugins
 vim.pack.add({
+	'git@github.com:nvim-lua/plenary.nvim.git',
 	'git@github.com:neovim/nvim-lspconfig.git',
 	'git@github.com:ibhagwan/fzf-lua.git',
 	'git@github.com:folke/which-key.nvim.git',
@@ -17,6 +18,8 @@ vim.pack.add({
 	'git@github.com:ray-x/guihua.lua.git',
 	'git@github.com:lewis6991/gitsigns.nvim.git',
 	'git@github.com:rachartier/tiny-code-action.nvim.git',
+	'git@github.com:sindrets/diffview.nvim.git',
+	'git@github.com:NeogitOrg/neogit.git',
 })
 
 -- Plugin configs
