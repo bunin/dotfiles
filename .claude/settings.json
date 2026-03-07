@@ -1,6 +1,7 @@
 {
   "env": {
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "CLAUDE_CODE_SHELL": "bash"
   },
   "enabledPlugins": {
     "gopls-lsp@claude-plugins-official": true,
@@ -17,7 +18,7 @@
     "slack@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true
   },
-  "language": "russian",
+  "language": "english",
   "spinnerTipsEnabled": true,
   "prefersReducedMotion": true,
   "teammateMode": "tmux"
