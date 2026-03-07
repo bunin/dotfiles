@@ -1,5 +1,5 @@
 [env]
-PATH = "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+PATH = "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/s9s/go/bin"
 
 [window]
 decorations = "None" # This might be default, but explicitly setting for clarity
