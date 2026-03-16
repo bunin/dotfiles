@@ -5,7 +5,7 @@
     }
   },
   "model": {
-    "name": "auto-gemini-2.5"
+    "name": "auto-gemini-3"
   },
   "general": {
     "previewFeatures": true,
