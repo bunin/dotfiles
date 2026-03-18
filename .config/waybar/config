@@ -3,9 +3,9 @@
     "position": "top",
     "height": 32,
     "spacing": 4,
-    "modules-left": ["niri/workspaces"],
+    "modules-left": ["custom/user", "niri/workspaces"],
     "modules-center": ["wlr/taskbar", "niri/window"],
-    "modules-right": ["mpd", "idle_inhibitor", "pulseaudio", "network", "cpu", "memory", "niri/language", "clock", "tray"],
+    "modules-right": ["mpd", "custom/weather", "idle_inhibitor", "custom/updates", "pulseaudio", "network", "disk", "temperature", "cpu", "memory", "niri/language", "clock", "tray"],
 
     "niri/workspaces": {
         "format": "{index}",
@@ -71,6 +71,39 @@
         "format-ethernet": "Connected ",
         "format-disconnected": "Disconnected ⚠",
         "tooltip-format": "{ifname} via {gwaddr}"
+    },
+
+    "custom/user": {
+        "format": " {}",
+        "exec": "whoami",
+        "interval": "once"
+    },
+
+    "custom/weather": {
+        "format": "{}",
+        "exec": "curl -s 'wttr.in/?format=%c+%t'",
+        "interval": 1800,
+        "tooltip": false
+    },
+
+    "custom/updates": {
+        "format": " {}",
+        "exec": "apt list --upgradable 2>/dev/null | grep -c upgradable || echo 0",
+        "interval": 3600,
+        "tooltip-format": "Available updates"
+    },
+
+    "disk": {
+        "format": " {percentage_used}%",
+        "path": "/",
+        "tooltip-format": "{used} / {total} ({percentage_used}%)"
+    },
+
+    "temperature": {
+        "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+        "format": " {temperatureC}°C",
+        "critical-threshold": 80,
+        "format-critical": " {temperatureC}°C"
     },
 
     "pulseaudio": {

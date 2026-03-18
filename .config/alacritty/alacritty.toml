@@ -8,8 +8,8 @@ startup_mode = "Maximized"
 [terminal]
 
 [terminal.shell]
-program = "tmux"
-args = ["new-session", "-A", "-s", "main"]
+program = "/bin/sh"
+args = ["-c", "exec tmux new-session"]
 
 [font]
 size = 14.0
