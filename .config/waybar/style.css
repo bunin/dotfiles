@@ -1,0 +1,110 @@
+* {
+    /* `otf-font-awesome` is required to be installed for icons */
+    font-family: FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+}
+
+window#waybar {
+    background-color: #1e1e2e; /* Solid dark background */
+    border-bottom: 2px solid #89b4fa;
+    color: #cdd6f4;
+    transition-property: background-color;
+    transition-duration: .5s;
+}
+
+#workspaces button {
+    padding: 0 10px;
+    background-color: transparent;
+    color: #cdd6f4;
+}
+
+#workspaces button:hover {
+    background: rgba(137, 180, 250, 0.2);
+    box-shadow: inset 0 -3px #89b4fa;
+}
+
+#workspaces button.focused {
+    background-color: #313244;
+    box-shadow: inset 0 -3px #f5e0dc;
+}
+
+#workspaces button.urgent {
+    background-color: #f38ba8;
+}
+
+#clock,
+#pulseaudio,
+#network,
+#cpu,
+#memory,
+#tray,
+#idle_inhibitor,
+#mpd,
+#language {
+    padding: 0 10px;
+    margin: 0 2px;
+    background-color: #313244;
+    border-radius: 4px;
+}
+
+#window {
+    margin: 0 10px;
+    font-weight: bold;
+}
+
+#taskbar button {
+    padding: 0 5px;
+    background-color: transparent;
+    border-radius: 4px;
+    margin: 0 2px;
+}
+
+#taskbar button:hover {
+    background-color: rgba(137, 180, 250, 0.2);
+    box-shadow: inset 0 -3px #89b4fa;
+}
+
+#taskbar button.active {
+    background-color: #313244;
+    box-shadow: inset 0 -3px #f5e0dc;
+}
+
+#clock {
+    color: #f5e0dc;
+}
+
+#cpu {
+    color: #a6e3a1;
+}
+
+#memory {
+    color: #fab387;
+}
+
+#network {
+    color: #89dceb;
+}
+
+#network.disconnected {
+    color: #f38ba8;
+}
+
+#pulseaudio {
+    color: #f9e2af;
+}
+
+#pulseaudio.muted {
+    color: #585b70;
+}
+
+#idle_inhibitor {
+    color: #eba0ac;
+}
+
+#mpd {
+    color: #94e2d5;
+}
+
+#language {
+    color: #cba6f7;
+}
