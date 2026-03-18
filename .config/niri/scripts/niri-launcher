@@ -1,0 +1,97 @@
+#!/usr/bin/env bash
+
+# Combined app launcher + window switcher for niri using fuzzel.
+# Open windows appear first (with icons), then .desktop apps (with icons).
+
+WINDOWS_JSON=$(niri msg --json windows 2>/dev/null)
+TMPFILE=$(mktemp)
+trap "rm -f $TMPFILE" EXIT
+
+# Write window entries with icons
+if [ -n "$WINDOWS_JSON" ] && [ "$WINDOWS_JSON" != "[]" ]; then
+    while IFS=$'\t' read -r app_id title wid; do
+        [ -z "$app_id" ] && continue
+        printf '● %s: %s\0icon\x1f%s\n' "$app_id" "$title" "${app_id,,}"
+    done < <(echo "$WINDOWS_JSON" | jq -r '
+        sort_by(.focus_timestamp.secs, .focus_timestamp.nanos) | reverse |
+        .[] | "\(.app_id)\t\(.title)\t\(.id)"
+    ') >> "$TMPFILE"
+fi
+
+# Parse all .desktop files in one awk pass, sort, format with icons
+cat /usr/share/applications/*.desktop \
+    ~/.local/share/applications/*.desktop \
+    /var/lib/flatpak/exports/share/applications/*.desktop \
+    ~/.local/share/flatpak/exports/share/applications/*.desktop \
+    2>/dev/null | awk '
+/^\[Desktop Entry\]/ {
+    if (name != "" && exec_cmd != "" && !nodisplay && !hidden && !seen[name]++) {
+        gsub(/ %[fFuUdDnNickvm]/, "", exec_cmd)
+        if (icon == "") icon = "application-x-executable"
+        if (terminal) exec_cmd = "alacritty -e " exec_cmd
+        print name "\t" icon "\t" exec_cmd
+    }
+    name=""; icon=""; exec_cmd=""; nodisplay=0; hidden=0; terminal=0; section="[Desktop Entry]"
+    next
+}
+/^\[/ { section = $0; next }
+section != "[Desktop Entry]" { next }
+/^Name=/ && name == "" { name = substr($0, 6) }
+/^Icon=/ && icon == "" { icon = substr($0, 6) }
+/^Exec=/ && exec_cmd == "" { exec_cmd = substr($0, 6) }
+/^NoDisplay=true/ { nodisplay=1 }
+/^Hidden=true/ { hidden=1 }
+/^Terminal=true/ { terminal=1 }
+END {
+    if (name != "" && exec_cmd != "" && !nodisplay && !hidden && !seen[name]++) {
+        gsub(/ %[fFuUdDnNickvm]/, "", exec_cmd)
+        if (icon == "") icon = "application-x-executable"
+        if (terminal) exec_cmd = "alacritty -e " exec_cmd
+        print name "\t" icon "\t" exec_cmd
+    }
+}
+' | sort -t$'\t' -k1,1f | while IFS=$'\t' read -r name icon exec_cmd; do
+    printf '%s\0icon\x1f%s\n' "$name" "$icon"
+done >> "$TMPFILE"
+
+# Show in fuzzel
+CHOICE=$(fuzzel -d -w 60 -p "➜ " < "$TMPFILE")
+[ -z "$CHOICE" ] && exit 0
+
+if [[ "$CHOICE" == "● "* ]]; then
+    LABEL="${CHOICE#● }"
+    WINDOW_ID=$(echo "$WINDOWS_JSON" | jq -r --arg label "$LABEL" '
+        .[] | select((.app_id + ": " + .title) == $label) | .id
+    ' | head -1)
+    [ -n "$WINDOW_ID" ] && niri msg action focus-window --id "$WINDOW_ID"
+else
+    # Look up exec command from .desktop files
+    EXEC_CMD=$(cat /usr/share/applications/*.desktop \
+        ~/.local/share/applications/*.desktop \
+        /var/lib/flatpak/exports/share/applications/*.desktop \
+    ~/.local/share/flatpak/exports/share/applications/*.desktop \
+        2>/dev/null | awk -v target="$CHOICE" '
+    /^\[Desktop Entry\]/ {
+        if (name == target && exec_cmd != "") {
+            gsub(/ %[fFuUdDnNickvm]/, "", exec_cmd)
+            if (terminal) exec_cmd = "alacritty -e " exec_cmd
+            print exec_cmd
+            exit
+        }
+        name=""; exec_cmd=""; terminal=0; section="[Desktop Entry]"
+        next
+    }
+    /^\[/ { section = $0; next }
+    section != "[Desktop Entry]" { next }
+    /^Name=/ && name == "" { name = substr($0, 6) }
+    /^Exec=/ && exec_cmd == "" { exec_cmd = substr($0, 6) }
+    /^Terminal=true/ { terminal=1 }
+    END {
+        if (name == target && exec_cmd != "") {
+            gsub(/ %[fFuUdDnNickvm]/, "", exec_cmd)
+            if (terminal) exec_cmd = "alacritty -e " exec_cmd
+            print exec_cmd
+        }
+    }')
+    [ -n "$EXEC_CMD" ] && setsid $EXEC_CMD &>/dev/null &
+fi

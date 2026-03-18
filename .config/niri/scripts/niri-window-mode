@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# Rofi script mode for niri windows.
+# When called with no argument — lists windows.
+# When called with a selection — focuses that window.
+
+if [ -z "$1" ]; then
+    # List windows sorted by most recently focused
+    niri msg --json windows 2>/dev/null | jq -r '
+        sort_by(.focus_timestamp.secs, .focus_timestamp.nanos) | reverse |
+        .[] | "\(.app_id): \(.title)"
+    '
+else
+    # Focus the selected window
+    WINDOW_ID=$(niri msg --json windows 2>/dev/null | jq -r --arg choice "$1" '
+        .[] | select((.app_id + ": " + .title) == $choice) | .id
+    ' | head -1)
+    if [ -n "$WINDOW_ID" ]; then
+        niri msg action focus-window --id "$WINDOW_ID"
+    fi
+fi

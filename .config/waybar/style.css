@@ -40,7 +40,12 @@ window#waybar {
 #tray,
 #idle_inhibitor,
 #mpd,
-#language {
+#language,
+#custom-user,
+#custom-weather,
+#custom-updates,
+#disk,
+#temperature {
     padding: 0 10px;
     margin: 0 2px;
     background-color: #313244;
@@ -107,4 +112,29 @@ window#waybar {
 
 #language {
     color: #cba6f7;
+}
+
+#custom-user {
+    color: #b4befe;
+    font-weight: bold;
+}
+
+#custom-weather {
+    color: #89dceb;
+}
+
+#custom-updates {
+    color: #a6e3a1;
+}
+
+#disk {
+    color: #cba6f7;
+}
+
+#temperature {
+    color: #f9e2af;
+}
+
+#temperature.critical {
+    color: #f38ba8;
 }
