@@ -18,7 +18,7 @@
     "slack@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true
   },
-  "language": "english",
+  "language": "russian",
   "spinnerTipsEnabled": true,
   "prefersReducedMotion": true,
   "teammateMode": "tmux"
