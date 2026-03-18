@@ -16,16 +16,15 @@ vim.pack.add({
 	'git@github.com:nvim-treesitter/nvim-treesitter.git',
 	'git@github.com:ray-x/go.nvim.git',
 	'git@github.com:ray-x/guihua.lua.git',
-	'git@github.com:lewis6991/gitsigns.nvim.git',
+	'git@github.com:tanvirtin/vgit.nvim.git',
+	'git@github.com:nvim-tree/nvim-web-devicons.git',
 	'git@github.com:rachartier/tiny-code-action.nvim.git',
-	'git@github.com:sindrets/diffview.nvim.git',
-	'git@github.com:NeogitOrg/neogit.git',
 })
 
 -- Plugin configs
 require('plugins.lsp')
 require('plugins.treesitter')
-require('plugins.gitsigns')
+require('plugins.vgit')
 require('plugins.fzf')
 require('plugins.go')
 require('which-key').setup()

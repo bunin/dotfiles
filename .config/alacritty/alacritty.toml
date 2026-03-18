@@ -12,7 +12,7 @@ program = "tmux"
 args = ["new-session", "-A", "-s", "main"]
 
 [font]
-size = 16.0
+size = 14.0
 normal = { family = "Hack Nerd Font", style = "Regular" }
 italic = { family = "Hack Nerd Font", style = "Italic" }
 bold = { family = "Hack Nerd Font", style = "Bold" }
