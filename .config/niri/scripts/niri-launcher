@@ -72,22 +72,24 @@ else
     ~/.local/share/flatpak/exports/share/applications/*.desktop \
         2>/dev/null | awk -v target="$CHOICE" '
     /^\[Desktop Entry\]/ {
-        if (name == target && exec_cmd != "") {
+        if (name == target && exec_cmd != "" && !nodisplay && !hidden) {
             gsub(/ %[fFuUdDnNickvm]/, "", exec_cmd)
             if (terminal) exec_cmd = "alacritty -e " exec_cmd
             print exec_cmd
-            exit
+            found=1; exit
         }
-        name=""; exec_cmd=""; terminal=0; section="[Desktop Entry]"
+        name=""; exec_cmd=""; nodisplay=0; hidden=0; terminal=0; section="[Desktop Entry]"
         next
     }
     /^\[/ { section = $0; next }
     section != "[Desktop Entry]" { next }
     /^Name=/ && name == "" { name = substr($0, 6) }
     /^Exec=/ && exec_cmd == "" { exec_cmd = substr($0, 6) }
+    /^NoDisplay=true/ { nodisplay=1 }
+    /^Hidden=true/ { hidden=1 }
     /^Terminal=true/ { terminal=1 }
     END {
-        if (name == target && exec_cmd != "") {
+        if (!found && name == target && exec_cmd != "" && !nodisplay && !hidden) {
             gsub(/ %[fFuUdDnNickvm]/, "", exec_cmd)
             if (terminal) exec_cmd = "alacritty -e " exec_cmd
             print exec_cmd
