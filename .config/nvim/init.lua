@@ -5,11 +5,16 @@ vim.opt.clipboard = 'unnamedplus'
 vim.opt.termguicolors = true
 vim.opt.number = true
 vim.opt.relativenumber = true
+vim.opt.tabstop = 2
+vim.opt.softtabstop = 2
 vim.cmd.colorscheme('lunaperche')
 
 -- Plugins
 vim.pack.add({
 	'git@github.com:nvim-lua/plenary.nvim.git',
+	'git@github.com:mason-org/mason.nvim.git',
+	'git@github.com:mason-org/mason-lspconfig.nvim.git',
+	'git@github.com:WhoIsSethDaniel/mason-tool-installer.nvim.git',
 	'git@github.com:neovim/nvim-lspconfig.git',
 	'git@github.com:ibhagwan/fzf-lua.git',
 	'git@github.com:folke/which-key.nvim.git',
@@ -28,3 +33,11 @@ require('plugins.vgit')
 require('plugins.fzf')
 require('plugins.go')
 require('which-key').setup()
+require('mason').setup()
+require('mason-lspconfig').setup()
+require('mason-tool-installer').setup {
+	ensure_installed = {
+		'lua_ls',
+		'stylua',
+	}
+}

@@ -20,6 +20,18 @@
       "rev": "ef44ba40f12e56c1c9fa45967f2b4d142e4b97a0",
       "src": "git@github.com:ray-x/guihua.lua.git"
     },
+    "mason-lspconfig.nvim": {
+      "rev": "9e3a9fe4f1f9f34b19307a2695dee8fbbd0be776",
+      "src": "git@github.com:mason-org/mason-lspconfig.nvim.git"
+    },
+    "mason-tool-installer.nvim": {
+      "rev": "443f1ef8b5e6bf47045cb2217b6f748a223cf7dc",
+      "src": "git@github.com:WhoIsSethDaniel/mason-tool-installer.nvim.git"
+    },
+    "mason.nvim": {
+      "rev": "44d1e90e1f66e077268191e3ee9d2ac97cc18e65",
+      "src": "git@github.com:mason-org/mason.nvim.git"
+    },
     "neogit": {
       "rev": "515e8cb9c3430a064ec3d9affd499b94f71b3120",
       "src": "git@github.com:NeogitOrg/neogit.git"
