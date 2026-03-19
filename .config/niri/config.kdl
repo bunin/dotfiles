@@ -246,6 +246,7 @@ layout {
 
 spawn-at-startup "cosmic-settings-daemon"
 spawn-at-startup "xwayland-satellite" ":1"
+spawn-at-startup "mako"
 
 environment {
     XDG_CURRENT_DESKTOP "COSMIC"
