@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+# Window switcher for niri using fuzzel with icons.
+
+WINDOWS_JSON=$(niri msg --json windows 2>/dev/null)
+
+if [ -z "$WINDOWS_JSON" ] || [ "$WINDOWS_JSON" = "[]" ]; then
+    exit 0
+fi
+
+FUZZEL_INPUT=$(mktemp)
+trap "rm -f $FUZZEL_INPUT" EXIT
+
+# Build fuzzel input directly to file (preserves null bytes)
+echo "$WINDOWS_JSON" | jq -r '
+    sort_by(.focus_timestamp.secs, .focus_timestamp.nanos) | reverse |
+    .[] | "\(.id)\t\(.app_id)\t\(.title)"
+' | while IFS=$'\t' read -r wid app_id title; do
+    [ -z "$app_id" ] && continue
+    printf '%s: %s\0icon\x1f%s\n' "$app_id" "$title" "$app_id" >> "$FUZZEL_INPUT"
+done
+
+CHOICE=$(fuzzel -d -w 60 -p "Focus: " < "$FUZZEL_INPUT")
+[ -z "$CHOICE" ] && exit 0
+
+# Extract app_id and title from choice
+APP_ID="${CHOICE%%: *}"
+TITLE="${CHOICE#*: }"
+
+WINDOW_ID=$(echo "$WINDOWS_JSON" | jq -r --arg app "$APP_ID" --arg title "$TITLE" '
+    .[] | select(.app_id == $app and .title == $title) | .id
+' | head -1)
+
+[ -n "$WINDOW_ID" ] && niri msg action focus-window --id "$WINDOW_ID"
