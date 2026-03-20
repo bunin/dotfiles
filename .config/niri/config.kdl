@@ -249,6 +249,9 @@ spawn-at-startup "xwayland-satellite" ":1"
 spawn-at-startup "mako"
 
 environment {
+    GTK_IM_MODULE "wayland"
+    QT_IM_MODULE "ibus"
+    XMODIFIERS "@im=ibus"
     XDG_CURRENT_DESKTOP "COSMIC"
     COSMIC_DATA_CONTROL_UNSTABLE_V1 "1"
     //WGPU_BACKEND "vulkan"
