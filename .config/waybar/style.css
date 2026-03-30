@@ -44,6 +44,7 @@ window#waybar {
 #custom-user,
 #custom-weather,
 #custom-updates,
+#custom-clockify,
 #disk,
 #temperature {
     padding: 0 10px;
@@ -137,4 +138,12 @@ window#waybar {
 
 #temperature.critical {
     color: #f38ba8;
+}
+
+#custom-clockify {
+    color: #f5c2e7;
+}
+
+#custom-clockify.stopped {
+    color: #585b70;
 }

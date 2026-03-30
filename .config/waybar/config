@@ -5,7 +5,7 @@
     "spacing": 4,
     "modules-left": ["custom/user", "niri/workspaces"],
     "modules-center": ["wlr/taskbar", "niri/window"],
-    "modules-right": ["mpd", "custom/weather", "idle_inhibitor", "custom/updates", "pulseaudio", "network", "disk", "temperature", "cpu", "memory", "niri/language", "clock", "tray"],
+    "modules-right": ["mpd", "custom/weather", "idle_inhibitor", "custom/updates", "pulseaudio", "network", "disk", "temperature", "cpu", "memory", "niri/language", "custom/clockify", "clock", "tray"],
 
     "niri/workspaces": {
         "format": "{index}",
@@ -104,6 +104,15 @@
         "format": " {temperatureC}°C",
         "critical-threshold": 80,
         "format-critical": " {temperatureC}°C"
+    },
+
+    "custom/clockify": {
+        "format": "{}",
+        "return-type": "json",
+        "exec": "~/.config/waybar/clockify.sh",
+        "interval": 60,
+        "tooltip": true,
+        "on-click": "gtk-launch clockify"
     },
 
     "pulseaudio": {
