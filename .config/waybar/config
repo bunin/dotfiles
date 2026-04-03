@@ -12,7 +12,7 @@
     "modules-right": [
         "group/media",
         "group/system",
-        "group/clock",
+        "group/clockbox",
         "tray",
         "group/power"
     ],
@@ -43,7 +43,7 @@
             "memory"
         ]
     },
-    "group/clock": {
+    "group/clockbox": {
         "orientation": "vertical",
         "modules": [
             "niri/language",
