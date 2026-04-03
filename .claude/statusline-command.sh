@@ -27,7 +27,7 @@ fi
 five_pct=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty')
 five_resets=$(echo "$input" | jq -r '.rate_limits.five_hour.resets_at // empty')
 if [ -n "$five_pct" ]; then
-  filled=$(printf '%.0f' "$(echo "$five_pct / 10" | awk '{printf "%f", $1}')")
+  filled=$(echo "$five_pct" | awk '{printf "%.0f", $1 / 10}')
   empty=$((10 - filled))
   bar=""
   i=0
