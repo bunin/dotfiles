@@ -230,7 +230,7 @@ layout {
     // Top and bottom struts will simply add outer gaps in addition to the area occupied by
     // layer-shell panels and regular gaps.
     struts {
-        // left 64
+        // left 54
         // right 64
         // top 64
         // bottom 64
@@ -244,22 +244,25 @@ layout {
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
 
+spawn-at-startup "env" "XDG_CURRENT_DESKTOP=GNOME" "ibus-daemon" "-drxR"
 spawn-at-startup "cosmic-settings-daemon"
 spawn-at-startup "xwayland-satellite" ":1"
 spawn-at-startup "mako"
 
 environment {
-    GTK_IM_MODULE "wayland"
-    QT_IM_MODULE "ibus"
-    XMODIFIERS "@im=ibus"
+    // GTK_IM_MODULE "wayland"
+    // QT_IM_MODULE "ibus"
+    // XMODIFIERS "@im=ibus"
     XDG_CURRENT_DESKTOP "COSMIC"
     COSMIC_DATA_CONTROL_UNSTABLE_V1 "1"
-    //WGPU_BACKEND "vulkan"
     MOZ_ENABLE_WAYLAND "1"
     DISPLAY ":1"
 }
 
     // spawn-at-startup "/usr/local/bin/waybar"
+
+// Waybar autohide trigger zone (left edge, 6px wide, 300ms hide delay)
+spawn-sh-at-startup "python3 ~/.config/waybar/waybar-autohide.py --edge left --size 6 --bar-size 36 --delay 300"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
@@ -307,6 +310,17 @@ window-rule {
     // You can get away with just app-id="wezterm" if you want.
     match app-id=r#"^org\.wezfurlong\.wezterm$"#
     default-column-width {}
+}
+
+// Work around cosmic-settings winit/iced initial configure bug
+window-rule {
+    match app-id=r#"^com\.system76\.CosmicSettings$"#
+    default-column-width {}
+}
+
+window-rule {
+    match app-id="bitwig-studio"
+    open-floating true
 }
 
 // Open the Firefox picture-in-picture player as floating by default.
@@ -624,6 +638,9 @@ binds {
     // Powers off the monitors. To turn them back on, do any input like
     // moving the mouse or pressing any other key.
     Mod+Shift+P { power-off-monitors; }
+
+    // Toggle waybar visibility
+    Mod+B { spawn-sh "killall -SIGUSR1 waybar"; }
 }
 
 debug {
