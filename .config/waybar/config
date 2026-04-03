@@ -19,13 +19,26 @@
         "temperature",
         "cpu",
         "memory",
-        "niri/language",
-        "clock",
+        "group/clock",
         "tray",
-        "custom/logout",
-        "custom/restart",
-        "custom/poweroff"
+        "group/power"
     ],
+    "group/power": {
+        "orientation": "vertical",
+        "modules": [
+            "custom/logout",
+            "custom/restart",
+            "custom/poweroff"
+        ]
+    },
+    "group/clock": {
+        "orientation": "vertical",
+        "modules": [
+            "niri/language",
+            "clock"
+        ]
+    },
+
     "niri/workspaces": {
         "format": "{index}",
         "all-outputs": true
