@@ -62,7 +62,7 @@
         "icon-size": 16
     },
     "clock": {
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "tooltip-format": "<big>{:%A, %B %d, %Y}</big>\n<tt><small>{calendar}</small></tt>",
         "format-alt": "{:%d\n%m}",
         "format": "{:%H\n%M}"
     },
