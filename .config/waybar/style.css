@@ -39,7 +39,7 @@ window#waybar {
 #memory,
 #tray,
 #idle_inhibitor,
-#mpd,
+#mpris,
 #language,
 #custom-user,
 #custom-updates,
@@ -104,7 +104,7 @@ window#waybar {
     color: #eba0ac;
 }
 
-#mpd {
+#mpris {
     color: #94e2d5;
 }
 
@@ -145,12 +145,12 @@ window#waybar {
 #clock-group {
     padding: 0;
     margin: 2px 0;
-    background-color: transparent;
-    border-radius: 0;
+    background-color: #313244;
+    border-radius: 4px;
 }
 
 #clock-group:hover {
-    background-color: transparent;
+    background-color: rgba(137, 180, 250, 0.2);
 }
 
 #clock-group #language {
@@ -158,8 +158,8 @@ window#waybar {
     padding: 4px 0;
     margin: 0;
     min-height: 0;
-    background-color: #313244;
-    border-radius: 4px 4px 0 0;
+    background-color: transparent;
+    border-radius: 0;
 }
 
 #clock-group #clock {
@@ -169,8 +169,49 @@ window#waybar {
     padding: 4px 0;
     margin: 0;
     min-height: 0;
+    background-color: transparent;
+    border-radius: 0;
+}
+
+/* Media group: idle_inhibitor + pulseaudio */
+#media {
+    padding: 0;
+    margin: 2px 0;
     background-color: #313244;
-    border-radius: 0 0 4px 4px;
+    border-radius: 4px;
+}
+
+#media #mpris,
+#media #pulseaudio {
+    padding: 4px 0;
+    margin: 0;
+    background-color: transparent;
+    border-radius: 0;
+}
+
+#media #mpris:hover,
+#media #pulseaudio:hover {
+    background-color: rgba(137, 180, 250, 0.2);
+}
+
+/* System group: updates + network + disk + temp + cpu + memory */
+#system {
+    padding: 0;
+    margin: 2px 0;
+    background-color: #313244;
+    border-radius: 4px;
+}
+
+#system #custom-updates,
+#system #network,
+#system #disk,
+#system #temperature,
+#system #cpu,
+#system #memory {
+    padding: 4px 0;
+    margin: 0;
+    background-color: transparent;
+    border-radius: 0;
 }
 
 /* Power group: logout + restart + poweroff stacked */
@@ -181,6 +222,7 @@ window#waybar {
     border-radius: 4px;
 }
 
+#power #idle_inhibitor,
 #power #custom-logout,
 #power #custom-restart,
 #power #custom-poweroff {
@@ -203,25 +245,22 @@ window#waybar {
 }
 
 /* Hover effects */
-#pulseaudio:hover,
-#network:hover,
-#cpu:hover,
-#memory:hover,
-#idle_inhibitor:hover,
-#mpd:hover,
+#mpris:hover,
 #custom-user:hover,
-#custom-updates:hover,
-#custom-clockify:hover,
-#disk:hover,
-#temperature:hover {
+#custom-clockify:hover {
     background-color: rgba(137, 180, 250, 0.2);
 }
 
-#clock-group #language:hover,
-#clock-group #clock:hover {
+#system #custom-updates:hover,
+#system #network:hover,
+#system #disk:hover,
+#system #temperature:hover,
+#system #cpu:hover,
+#system #memory:hover {
     background-color: rgba(137, 180, 250, 0.2);
 }
 
+#power #idle_inhibitor:hover,
 #power #custom-logout:hover,
 #power #custom-restart:hover,
 #power #custom-poweroff:hover {

@@ -10,15 +10,8 @@
     ],
     "modules-center": [],
     "modules-right": [
-        "mpd",
-        "idle_inhibitor",
-        "custom/updates",
-        "pulseaudio",
-        "network",
-        "disk",
-        "temperature",
-        "cpu",
-        "memory",
+        "group/media",
+        "group/system",
         "group/clock",
         "tray",
         "group/power"
@@ -26,9 +19,28 @@
     "group/power": {
         "orientation": "vertical",
         "modules": [
+            "idle_inhibitor",
             "custom/logout",
             "custom/restart",
             "custom/poweroff"
+        ]
+    },
+    "group/media": {
+        "orientation": "vertical",
+        "modules": [
+            "mpris",
+            "pulseaudio"
+        ]
+    },
+    "group/system": {
+        "orientation": "vertical",
+        "modules": [
+            "custom/updates",
+            "network",
+            "disk",
+            "temperature",
+            "cpu",
+            "memory"
         ]
     },
     "group/clock": {
@@ -51,13 +63,12 @@
         "on-click-middle": "close"
     },
     "niri/language": {
-        "format": "{short}"
+        "format": "{short}",
+        "on-click": "niri msg action switch-layout next"
     },
-    "mpd": {
-        "format": "{stateIcon}",
-        "format-disconnected": "",
-        "format-stopped": "",
-        "state-icons": {
+    "mpris": {
+        "format": "{status_icon}",
+        "status-icons": {
             "paused": "",
             "playing": ""
         },
