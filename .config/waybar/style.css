@@ -61,22 +61,35 @@ window#waybar {
     border-radius: 0;
 }
 
+#taskbar {
+    background-color: #282a36;
+    border-radius: 12px;
+    margin: 4px 2px;
+    padding: 2px 0;
+}
+
 #taskbar button {
     padding: 5px 0;
     min-width: 40px;
     min-height: 0;
     background-color: transparent;
     border-radius: 0;
-    margin: 2px 0;
+    margin: 0;
+}
+
+#taskbar:hover {
+    background-color: #313245;
 }
 
 #taskbar button:hover {
-    background-color: rgba(189, 147, 249, 0.2);
+    background-color: #44475a;
+    border-radius: 12px;
 }
 
 #taskbar button.active {
     background-color: #44475a;
     color: #bd93f9;
+    border-radius: 12px;
 }
 
 #cpu {
