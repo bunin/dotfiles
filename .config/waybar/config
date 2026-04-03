@@ -1,17 +1,35 @@
 {
     "layer": "top",
-    "position": "top",
-    "height": 32,
+    "position": "left",
+    "width": 36,
     "spacing": 4,
-    "modules-left": ["custom/user", "niri/workspaces"],
-    "modules-center": ["wlr/taskbar", "niri/window"],
-    "modules-right": ["mpd", "custom/weather", "idle_inhibitor", "custom/updates", "pulseaudio", "network", "disk", "temperature", "cpu", "memory", "niri/language", "custom/clockify", "clock", "tray"],
-
+    "modules-left": [
+        "custom/user",
+        "niri/workspaces",
+        "wlr/taskbar"
+    ],
+    "modules-center": [],
+    "modules-right": [
+        "mpd",
+        "idle_inhibitor",
+        "custom/updates",
+        "pulseaudio",
+        "network",
+        "disk",
+        "temperature",
+        "cpu",
+        "memory",
+        "niri/language",
+        "clock",
+        "tray",
+        "custom/logout",
+        "custom/restart",
+        "custom/poweroff"
+    ],
     "niri/workspaces": {
         "format": "{index}",
         "all-outputs": true
     },
-
     "wlr/taskbar": {
         "format": "{icon}",
         "icon-size": 18,
@@ -19,27 +37,19 @@
         "on-click": "activate",
         "on-click-middle": "close"
     },
-
-    "niri/window": {
-        "format": "{title}",
-        "max-length": 50,
-        "separate-outputs": true
-    },
-
     "niri/language": {
         "format": "{short}"
     },
-
     "mpd": {
-        "format": "{stateIcon} {artist} - {title}",
-        "format-disconnected": "Disconnected ",
-        "format-stopped": "Stopped ",
+        "format": "{stateIcon}",
+        "format-disconnected": "",
+        "format-stopped": "",
         "state-icons": {
             "paused": "",
             "playing": ""
-        }
+        },
+        "tooltip-format": "{artist} - {title}"
     },
-
     "idle_inhibitor": {
         "format": "{icon}",
         "format-icons": {
@@ -47,78 +57,60 @@
             "deactivated": ""
         }
     },
-
     "tray": {
-        "spacing": 10
+        "spacing": 4,
+        "icon-size": 16
     },
-
     "clock": {
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": "{:%Y-%m-%d}"
+        "format-alt": "{:%d\n%m}",
+        "format": "{:%H\n%M}"
     },
-
     "cpu": {
-        "format": "{usage}% ",
-        "tooltip": false
+        "format": "",
+        "tooltip": true,
+        "tooltip-format": "CPU: {usage}%"
     },
-
     "memory": {
-        "format": "{}% "
+        "format": "",
+        "tooltip-format": "RAM: {percentage}%"
     },
-
     "network": {
-        "format-wifi": "{essid} ",
-        "format-ethernet": "Connected ",
-        "format-disconnected": "Disconnected ⚠",
-        "tooltip-format": "{ifname} via {gwaddr}"
+        "format-wifi": "",
+        "format-ethernet": "",
+        "format-disconnected": "⚠",
+        "tooltip-format": "{ifname} via {gwaddr}\n{essid} {signalStrength}%"
     },
-
     "custom/user": {
-        "format": " {}",
+        "format": "",
         "exec": "whoami",
-        "interval": "once"
+        "interval": "once",
+        "tooltip": true,
+        "tooltip-format": "{}"
     },
-
-    "custom/weather": {
-        "format": "{}",
-        "exec": "curl -s 'wttr.in/?format=%c+%t'",
-        "interval": 1800,
-        "tooltip": false
-    },
-
     "custom/updates": {
-        "format": " {}",
+        "format": "",
         "exec": "apt list --upgradable 2>/dev/null | grep -c upgradable || echo 0",
         "interval": 3600,
-        "tooltip-format": "Available updates"
+        "tooltip-format": "{} updates available",
+        "tooltip": true
     },
-
     "disk": {
-        "format": " {percentage_used}%",
+        "format": "",
         "path": "/",
-        "tooltip-format": "{used} / {total} ({percentage_used}%)"
+        "tooltip-format": "Disk: {used} / {total} ({percentage_used}%)"
     },
-
     "temperature": {
         "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
-        "format": " {temperatureC}°C",
+        "format": "",
         "critical-threshold": 80,
-        "format-critical": " {temperatureC}°C"
+        "format-critical": "",
+        "tooltip-format": "Temp: {temperatureC}°C"
     },
-
-    "custom/clockify": {
-        "format": "{}",
-        "return-type": "json",
-        "exec": "~/.config/waybar/clockify.sh",
-        "interval": 60,
-        "tooltip": true,
-        "on-click": "gtk-launch clockify"
-    },
-
     "pulseaudio": {
-        "format": "{volume}% {icon}",
-        "format-bluetooth": "{volume}% {icon}",
-        "format-muted": "",
+        "format": "{icon}",
+        "format-bluetooth": "{icon}",
+        "format-muted": "",
         "format-icons": {
             "headphone": "",
             "hands-free": "",
@@ -126,8 +118,33 @@
             "phone": "",
             "portable": "",
             "car": "",
-            "default": ["", "", ""]
+            "default": [
+                "",
+                "",
+                ""
+            ]
         },
-        "on-click": "pavucontrol"
-    }
+        "on-click": "pavucontrol",
+        "tooltip-format": "Volume: {volume}%\n{desc}"
+    },
+    "custom/logout": {
+        "format": "󰍃",
+        "tooltip": true,
+        "tooltip-format": "Log out",
+        "on-click": "niri msg action quit"
+    },
+    "custom/restart": {
+        "format": "",
+        "tooltip": true,
+        "tooltip-format": "Restart",
+        "on-click": "systemctl reboot"
+    },
+    "custom/poweroff": {
+        "format": "⏻",
+        "tooltip": true,
+        "tooltip-format": "Power off",
+        "on-click": "systemctl poweroff"
+    },
+    "start_hidden": true,
+    "exclusive": false
 }
