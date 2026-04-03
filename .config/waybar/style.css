@@ -76,12 +76,6 @@ window#waybar {
     box-shadow: inset -3px 0 #f5e0dc;
 }
 
-#clock {
-    color: #f5e0dc;
-    font-size: 12px;
-    font-weight: bold;
-}
-
 #cpu {
     color: #a6e3a1;
 }
@@ -112,10 +106,6 @@ window#waybar {
 
 #mpd {
     color: #94e2d5;
-}
-
-#language {
-    color: #cba6f7;
 }
 
 #custom-user {
@@ -151,6 +141,55 @@ window#waybar {
     -gtk-icon-effect: highlight;
 }
 
+/* Clock group: language + clock stacked */
+#clock-group {
+    padding: 0;
+    margin: 2px 0;
+    background-color: transparent;
+    border-radius: 0;
+}
+
+#clock-group:hover {
+    background-color: transparent;
+}
+
+#clock-group #language {
+    color: #cba6f7;
+    padding: 4px 0;
+    margin: 0;
+    min-height: 0;
+    background-color: #313244;
+    border-radius: 4px 4px 0 0;
+}
+
+#clock-group #clock {
+    color: #f5e0dc;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 4px 0;
+    margin: 0;
+    min-height: 0;
+    background-color: #313244;
+    border-radius: 0 0 4px 4px;
+}
+
+/* Power group: logout + restart + poweroff stacked */
+#power {
+    padding: 0;
+    margin: 2px 0;
+    background-color: #313244;
+    border-radius: 4px;
+}
+
+#power #custom-logout,
+#power #custom-restart,
+#power #custom-poweroff {
+    padding: 4px 0;
+    margin: 0;
+    background-color: transparent;
+    border-radius: 0;
+}
+
 #custom-logout {
     color: #a6e3a1;
 }
@@ -163,8 +202,28 @@ window#waybar {
     color: #f38ba8;
 }
 
-#custom-logout:hover,
-#custom-restart:hover,
-#custom-poweroff:hover {
+/* Hover effects */
+#pulseaudio:hover,
+#network:hover,
+#cpu:hover,
+#memory:hover,
+#idle_inhibitor:hover,
+#mpd:hover,
+#custom-user:hover,
+#custom-updates:hover,
+#custom-clockify:hover,
+#disk:hover,
+#temperature:hover {
+    background-color: rgba(137, 180, 250, 0.2);
+}
+
+#clock-group #language:hover,
+#clock-group #clock:hover {
+    background-color: rgba(137, 180, 250, 0.2);
+}
+
+#power #custom-logout:hover,
+#power #custom-restart:hover,
+#power #custom-poweroff:hover {
     background-color: rgba(137, 180, 250, 0.2);
 }
