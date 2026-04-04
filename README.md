@@ -2,33 +2,36 @@
 
 ## Setup
 
-Clone the repo and run the symlink commands below.
+Clone the repo, navigate to its directory, and run the symlink commands below.
 
 ```sh
-git clone git@github.com:bunin/dotfiles.git ~/projects/bunin/dotfiles
+git clone git@github.com:bunin/dotfiles.git
+cd dotfiles
 ```
 
 ### ~/.config
 
 ```sh
-ln -sf ~/projects/bunin/dotfiles/.config/alacritty ~/.config/alacritty
-ln -sf ~/projects/bunin/dotfiles/.config/niri ~/.config/niri
-ln -sf ~/projects/bunin/dotfiles/.config/nvim ~/.config/nvim
-ln -sf ~/projects/bunin/dotfiles/.config/tmux ~/.config/tmux
-ln -sf ~/projects/bunin/dotfiles/.config/waybar ~/.config/waybar
-ln -sf ~/projects/bunin/dotfiles/.config/xdg-desktop-portal ~/.config/xdg-desktop-portal
+ln -sf "$PWD/.config/alacritty" ~/.config/alacritty
+ln -sf "$PWD/.config/niri" ~/.config/niri
+ln -sf "$PWD/.config/nvim" ~/.config/nvim
+ln -sf "$PWD/.config/tmux" ~/.config/tmux
+ln -sf "$PWD/.config/waybar" ~/.config/waybar
+ln -sf "$PWD/.config/xdg-desktop-portal" ~/.config/xdg-desktop-portal
 ```
 
 ### ~/.claude
 
 ```sh
-ln -sf ~/projects/bunin/dotfiles/.claude/settings.json ~/.claude/settings.json
-ln -sf ~/projects/bunin/dotfiles/.claude/CLAUDE.md ~/.claude/CLAUDE.md
-ln -sf ~/projects/bunin/dotfiles/.claude/statusline-command.sh ~/.claude/statusline-command.sh
+mkdir -p ~/.claude
+ln -sf "$PWD/.claude/settings.json" ~/.claude/settings.json
+ln -sf "$PWD/.claude/CLAUDE.md" ~/.claude/CLAUDE.md
+ln -sf "$PWD/.claude/statusline-command.sh" ~/.claude/statusline-command.sh
 ```
 
 ### ~/.gemini
 
 ```sh
-ln -sf ~/projects/bunin/dotfiles/.gemini/settings.json ~/.gemini/settings.json
+mkdir -p ~/.gemini
+ln -sf "$PWD/.gemini/settings.json" ~/.gemini/settings.json
 ```
