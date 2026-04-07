@@ -51,5 +51,12 @@ if [ -n "$five_pct" ]; then
       time_left=" resetting"
     fi
   fi
-  printf ' \033[01;33m5h:[%s] %.0f%%%s\033[00m' "$bar" "$five_pct" "$time_left"
+  gmt_hour=$(date -u +%H | sed 's/^0//')
+  ESC=$(printf '\033')
+  if [ "$gmt_hour" -ge 13 ] && [ "$gmt_hour" -lt 19 ]; then
+    peak_mark=" ${ESC}[01;31mpeak${ESC}[01;33m"
+  else
+    peak_mark=" ${ESC}[00;32moff-peak${ESC}[01;33m"
+  fi
+  printf ' \033[01;33m5h:[%s] %.0f%%%s%s\033[00m' "$bar" "$five_pct" "$time_left" "$peak_mark"
 fi
