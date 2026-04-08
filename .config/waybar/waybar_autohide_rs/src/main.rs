@@ -156,6 +156,27 @@ fn build_ui(app: &Application, state: Rc<RefCell<AppState>>) {
     });
 
     window.add_events(gdk::EventMask::ENTER_NOTIFY_MASK | gdk::EventMask::LEAVE_NOTIFY_MASK);
+
+    // Handle SIGUSR1: external toggle (e.g. Mod+B keybinding).
+    // This keeps internal state in sync with waybar's actual visibility.
+    let state_signal = state.clone();
+    let window_signal = window.clone();
+    glib::unix_signal_add_local(10 /* SIGUSR1 */, move || {
+        let mut s = state_signal.borrow_mut();
+        println!("[DEBUG] Received SIGUSR1, toggling. bar_visible={}", s.bar_visible);
+        if let Some(id) = s.hide_timer_id.take() {
+            id.remove();
+        }
+        toggle_waybar();
+        s.bar_visible = !s.bar_visible;
+        if s.bar_visible {
+            reposition_strip(&window_signal, s.edge, s.bar_size);
+        } else {
+            reposition_strip(&window_signal, s.edge, 0);
+        }
+        glib::ControlFlow::Continue
+    });
+
     window.show_all();
 }
 
