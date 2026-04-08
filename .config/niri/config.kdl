@@ -639,8 +639,8 @@ binds {
     // moving the mouse or pressing any other key.
     Mod+Shift+P { power-off-monitors; }
 
-    // Toggle waybar visibility
-    Mod+B { spawn-sh "killall -SIGUSR1 waybar"; }
+    // Toggle waybar visibility (signal autohide to keep state in sync)
+    Mod+B { spawn-sh "killall -SIGUSR1 waybar-autohide"; }
 }
 
 debug {
