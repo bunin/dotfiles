@@ -25,6 +25,11 @@
   },
   "language": "russian",
   "spinnerTipsEnabled": true,
+  "voiceEnabled": true,
+  "voice": {
+    "enabled": true,
+    "mode": "hold"
+  },
   "prefersReducedMotion": true,
   "teammateMode": "tmux"
 }
