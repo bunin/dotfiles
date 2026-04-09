@@ -26,6 +26,7 @@ ln -sf "$PWD/.config/xdg-desktop-portal" ~/.config/xdg-desktop-portal
 mkdir -p ~/.claude
 ln -sf "$PWD/.claude/settings.json" ~/.claude/settings.json
 ln -sf "$PWD/.claude/CLAUDE.md" ~/.claude/CLAUDE.md
+ln -sf "$PWD/.claude/keybindings.json" ~/.claude/keybindings.json
 ln -sf "$PWD/.claude/statusline-command.sh" ~/.claude/statusline-command.sh
 ```
 
