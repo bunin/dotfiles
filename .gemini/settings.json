@@ -16,7 +16,10 @@
     "sessionRetention": {
       "enabled": true
     },
-    "enablePromptCompletion": true
+    "enablePromptCompletion": true,
+    "plan": {
+      "enabled": true
+    }
   },
   "ui": {
     "showStatusInTitle": true,
@@ -31,9 +34,7 @@
   "tools": {
     "useRipgrep": true
   },
-  "experimental": {
-    "plan": true
-  },
+  "experimental": {},
   "mcpServers": {
     "github": {
       "url": "https://api.githubcopilot.com/mcp/",
@@ -41,5 +42,8 @@
         "Authorization": "Bearer ${GITHUB_MCP_PAT}"
       }
     }
+  },
+  "agents": {
+    "overrides": {}
   }
 }
