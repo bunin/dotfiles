@@ -1,8 +1,16 @@
 {
   "plugins": {
+    "blink.cmp": {
+      "rev": "456d38d1cd3743926f329204c2340f3e7840aad6",
+      "src": "git@github.com:saghen/blink.cmp.git"
+    },
     "diffview.nvim": {
       "rev": "4516612fe98ff56ae0415a259ff6361a89419b0a",
       "src": "git@github.com:sindrets/diffview.nvim.git"
+    },
+    "friendly-snippets": {
+      "rev": "6cd7280adead7f586db6fccbd15d2cac7e2188b9",
+      "src": "git@github.com:rafamadriz/friendly-snippets.git"
     },
     "fzf-lua": {
       "rev": "cfc085749d9232373fc6d8cf3a964c5601a7816e",
@@ -47,6 +55,10 @@
     "nvim-web-devicons": {
       "rev": "d7462543c9e366c0d196c7f67a945eaaf5d99414",
       "src": "git@github.com:nvim-tree/nvim-web-devicons.git"
+    },
+    "obsidian.nvim": {
+      "rev": "f816915e0bf2f60f44d23a5e3d59658fa8a20094",
+      "src": "git@github.com:obsidian-nvim/obsidian.nvim.git"
     },
     "plenary.nvim": {
       "rev": "b9fd5226c2f76c951fc8ed5923d85e4de065e509",

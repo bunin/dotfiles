@@ -7,6 +7,7 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.tabstop = 2
 vim.opt.softtabstop = 2
+vim.opt.conceallevel = 1
 vim.cmd.colorscheme('islands-dark')
 
 -- Plugins
@@ -24,6 +25,9 @@ vim.pack.add({
 	'git@github.com:tanvirtin/vgit.nvim.git',
 	'git@github.com:nvim-tree/nvim-web-devicons.git',
 	'git@github.com:rachartier/tiny-code-action.nvim.git',
+	'git@github.com:obsidian-nvim/obsidian.nvim.git',
+	'git@github.com:saghen/blink.cmp.git',
+	'git@github.com:rafamadriz/friendly-snippets.git',
 })
 
 -- Plugin configs
@@ -32,6 +36,9 @@ require('plugins.treesitter')
 require('plugins.vgit')
 require('plugins.fzf')
 require('plugins.go')
+require('plugins.obsidian')
+require('plugins.obsidian_keys')
+require('plugins.completion')
 require('which-key').setup()
 require('mason').setup()
 require('mason-lspconfig').setup()
