@@ -261,8 +261,8 @@ environment {
 
     // spawn-at-startup "/usr/local/bin/waybar"
 
-// Waybar autohide trigger zone (left edge, 6px wide, 300ms hide delay)
-spawn-sh-at-startup "~/.config/waybar/waybar-autohide --edge left --size 6 --bar-size 36 --delay 300"
+// Waybar autohide trigger zone (top edge, 6px tall, 300ms hide delay)
+spawn-sh-at-startup "~/.config/waybar/waybar-autohide --edge top --size 6 --bar-size 36 --delay 300"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"

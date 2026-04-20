@@ -21,15 +21,16 @@
     "slack@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true,
     "telegram@claude-plugins-official": true,
-    "rust-analyzer-lsp@claude-plugins-official": true
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "clangd-lsp@claude-plugins-official": true
   },
   "language": "russian",
   "spinnerTipsEnabled": true,
-  "voiceEnabled": true,
   "voice": {
     "enabled": true,
     "mode": "hold"
   },
   "prefersReducedMotion": true,
+  "voiceEnabled": true,
   "teammateMode": "tmux"
 }
