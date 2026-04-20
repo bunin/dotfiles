@@ -11,13 +11,13 @@ window#waybar {
 #workspaces {
     background-color: #282a36;
     border-radius: 12px;
-    margin: 4px 2px;
-    padding: 2px 0;
+    margin: 2px 4px;
+    padding: 0 2px;
 }
 
 #workspaces button {
-    padding: 8px 0;
-    min-width: 40px;
+    padding: 0 8px;
+    min-width: 0;
     min-height: 0;
     background-color: transparent;
     color: #f8f8f2;
@@ -53,9 +53,9 @@ window#waybar {
 #custom-logout,
 #custom-restart,
 #custom-poweroff {
-    padding: 6px 0;
+    padding: 0 6px;
     margin: 0;
-    min-width: 44px;
+    min-width: 0;
     min-height: 0;
     background-color: transparent;
     border-radius: 0;
@@ -64,13 +64,13 @@ window#waybar {
 #taskbar {
     background-color: #282a36;
     border-radius: 12px;
-    margin: 4px 2px;
-    padding: 2px 0;
+    margin: 2px 4px;
+    padding: 0 2px;
 }
 
 #taskbar button {
-    padding: 5px 0;
-    min-width: 40px;
+    padding: 0 5px;
+    min-width: 0;
     min-height: 0;
     background-color: transparent;
     border-radius: 0;
@@ -129,8 +129,8 @@ window#waybar {
     font-weight: bold;
     background-color: #282a36;
     border-radius: 12px;
-    margin: 4px 2px;
-    padding: 6px 0;
+    margin: 2px 4px;
+    padding: 0 6px;
 }
 
 #custom-updates {
@@ -150,10 +150,10 @@ window#waybar {
 }
 
 #tray {
-    padding: 4px 0;
+    padding: 0 4px;
     background-color: #282a36;
     border-radius: 12px;
-    margin: 4px 2px;
+    margin: 2px 4px;
 }
 
 #tray > .passive {
@@ -167,7 +167,7 @@ window#waybar {
 /* Clock group island */
 #clockbox {
     padding: 0;
-    margin: 4px 2px;
+    margin: 2px 4px;
     background-color: #282a36;
     border-radius: 12px;
 }
@@ -178,18 +178,18 @@ window#waybar {
 
 #clockbox #language:hover {
     background-color: #44475a;
-    border-radius: 12px 12px 0 0;
+    border-radius: 12px 0 0 12px;
 }
 
 #clockbox #clock:hover {
     background-color: #44475a;
-    border-radius: 0 0 12px 12px;
+    border-radius: 0 12px 12px 0;
 }
 
 #clockbox #language,
 #language {
     color: #ff79c6;
-    padding: 4px 0;
+    padding: 0 4px;
     margin: 0;
     min-height: 0;
     background-color: transparent;
@@ -199,9 +199,8 @@ window#waybar {
 #clockbox #clock,
 #clock {
     color: #f8f8f2;
-    font-size: 12px;
     font-weight: bold;
-    padding: 4px 0;
+    padding: 2px 4px 0 4px;
     margin: 0;
     min-height: 0;
     background-color: transparent;
@@ -211,14 +210,14 @@ window#waybar {
 /* Media group island */
 #media {
     padding: 0;
-    margin: 4px 2px;
+    margin: 2px 4px;
     background-color: #282a36;
     border-radius: 12px;
 }
 
 #media #mpris,
 #media #pulseaudio {
-    padding: 4px 0;
+    padding: 0 4px;
     margin: 0;
     background-color: transparent;
     border-radius: 0;
@@ -230,18 +229,18 @@ window#waybar {
 
 #media #mpris:hover {
     background-color: #44475a;
-    border-radius: 12px 12px 0 0;
+    border-radius: 12px 0 0 12px;
 }
 
 #media #pulseaudio:hover {
     background-color: #44475a;
-    border-radius: 0 0 12px 12px;
+    border-radius: 0 12px 12px 0;
 }
 
 /* System group island */
 #system {
     padding: 0;
-    margin: 4px 2px;
+    margin: 2px 4px;
     background-color: #282a36;
     border-radius: 12px;
 }
@@ -252,7 +251,7 @@ window#waybar {
 #system #temperature,
 #system #cpu,
 #system #memory {
-    padding: 4px 0;
+    padding: 0 4px;
     margin: 0;
     background-color: transparent;
     border-radius: 0;
@@ -264,7 +263,7 @@ window#waybar {
 
 #system #custom-updates:hover {
     background-color: #44475a;
-    border-radius: 12px 12px 0 0;
+    border-radius: 12px 0 0 12px;
 }
 
 #system #network:hover,
@@ -276,13 +275,13 @@ window#waybar {
 
 #system #memory:hover {
     background-color: #44475a;
-    border-radius: 0 0 12px 12px;
+    border-radius: 0 12px 12px 0;
 }
 
 /* Power group island */
 #power {
     padding: 0;
-    margin: 4px 2px;
+    margin: 2px 4px;
     background-color: #282a36;
     border-radius: 12px;
 }
@@ -291,7 +290,7 @@ window#waybar {
 #power #custom-logout,
 #power #custom-restart,
 #power #custom-poweroff {
-    padding: 4px 0;
+    padding: 0 4px;
     margin: 0;
     background-color: transparent;
     border-radius: 0;
@@ -303,7 +302,7 @@ window#waybar {
 
 #power #idle_inhibitor:hover {
     background-color: #44475a;
-    border-radius: 12px 12px 0 0;
+    border-radius: 12px 0 0 12px;
 }
 
 #power #custom-logout:hover,
@@ -313,7 +312,7 @@ window#waybar {
 
 #power #custom-poweroff:hover {
     background-color: #44475a;
-    border-radius: 0 0 12px 12px;
+    border-radius: 0 12px 12px 0;
 }
 
 #custom-logout {
@@ -326,6 +325,13 @@ window#waybar {
 
 #custom-poweroff {
     color: #ff5555;
+}
+
+#window {
+    background-color: #282a36;
+    border-radius: 12px;
+    margin: 2px 4px;
+    padding: 2px 8px 0 8px;
 }
 
 /* Hover effects for standalone modules */

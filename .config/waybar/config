@@ -1,12 +1,13 @@
 {
     "layer": "top",
-    "position": "left",
-    "width": 36,
+    "position": "top",
+    "height": 36,
     "spacing": 4,
     "modules-left": [
         "custom/user",
         "niri/workspaces",
-        "wlr/taskbar"
+        "wlr/taskbar",
+        "niri/window"
     ],
     "modules-center": [],
     "modules-right": [
@@ -17,7 +18,7 @@
         "group/power"
     ],
     "group/power": {
-        "orientation": "vertical",
+        "orientation": "horizontal",
         "modules": [
             "idle_inhibitor",
             "custom/logout",
@@ -26,14 +27,14 @@
         ]
     },
     "group/media": {
-        "orientation": "vertical",
+        "orientation": "horizontal",
         "modules": [
             "mpris",
             "pulseaudio"
         ]
     },
     "group/system": {
-        "orientation": "vertical",
+        "orientation": "horizontal",
         "modules": [
             "custom/updates",
             "network",
@@ -44,7 +45,7 @@
         ]
     },
     "group/clockbox": {
-        "orientation": "vertical",
+        "orientation": "horizontal",
         "modules": [
             "niri/language",
             "clock"
@@ -60,7 +61,8 @@
         "icon-size": 18,
         "tooltip-format": "{title}",
         "on-click": "activate",
-        "on-click-middle": "close"
+        "on-click-middle": "close",
+        "sort-by-app-id": true
     },
     "niri/language": {
         "format": "{short}",
@@ -87,8 +89,9 @@
     },
     "clock": {
         "tooltip-format": "<big>{:%A, %B %d, %Y}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": "{:%d\n%m}",
-        "format": "{:%H\n%M}"
+        "format-alt": "{:%H:%M:%S}",
+        "format": "{:%a %d %b %H:%M:%S}",
+        "interval": 1
     },
     "cpu": {
         "format": "",
@@ -106,7 +109,7 @@
         "tooltip-format": "{ifname} via {gwaddr}\n{essid} {signalStrength}%"
     },
     "custom/user": {
-        "format": "",
+        "format": " {}",
         "exec": "whoami",
         "interval": "once",
         "tooltip": true,
