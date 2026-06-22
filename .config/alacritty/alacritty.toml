@@ -12,7 +12,7 @@ program = "/bin/sh"
 args = ["-c", "exec tmux new-session"]
 
 [font]
-size = 12.0
+size = 14.0
 normal = { family = "Hack Nerd Font", style = "Regular" }
 italic = { family = "Hack Nerd Font", style = "Italic" }
 bold = { family = "Hack Nerd Font", style = "Bold" }
@@ -51,7 +51,7 @@ white   = '#f6f6ef'
 alphabet = "jksdhfgali"
 
 [[hints.enabled]]
-command = { program = "sh", args = ["-c", "~/.config/niri/scripts/open-and-focus.sh \"$0\""] }
+command = { program = "sh", args = ["-c", "case \"$(uname)\" in Darwin) open \"$0\" ;; *) ~/.config/niri/scripts/open-and-focus.sh \"$0\" ;; esac"] }
 hyperlinks = true
 post_processing = true
 persist = false
