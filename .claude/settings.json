@@ -24,13 +24,29 @@
     "rust-analyzer-lsp@claude-plugins-official": true,
     "clangd-lsp@claude-plugins-official": true
   },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -c 'if ((.tool_input.command // \"\") | test(\"skills/subagent-driven-development/scripts/(review-package|task-brief|sdd-workspace)\")) then {hookSpecificOutput:{hookEventName:\"PreToolUse\",permissionDecision:\"allow\",permissionDecisionReason:\"superpowers sdd script\"}} else {} end'",
+            "statusMessage": "Проверка разрешений SDD-скриптов"
+          }
+        ]
+      }
+    ]
+  },
   "language": "russian",
   "spinnerTipsEnabled": true,
+  "tui": "fullscreen",
   "voice": {
     "enabled": true,
     "mode": "hold"
   },
   "prefersReducedMotion": true,
+  "teammateMode": "tmux",
   "voiceEnabled": true,
-  "teammateMode": "tmux"
+  "agentPushNotifEnabled": true
 }

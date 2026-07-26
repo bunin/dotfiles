@@ -62,7 +62,10 @@
         "tooltip-format": "{title}",
         "on-click": "activate",
         "on-click-middle": "close",
-        "sort-by-app-id": true
+        "sort-by-app-id": true,
+        "app_ids-mapping": {
+            "jetbrains-pycharm": "jetbrains-pycharm-08892197-f2bf-44ff-af1f-8a3bcd005f0e"
+        }
     },
     "niri/language": {
         "format": "{short}",
@@ -85,7 +88,10 @@
     },
     "tray": {
         "spacing": 4,
-        "icon-size": 16
+        "icon-size": 16,
+        "icons": {
+            "Docker Desktop_status_icon_1": "/opt/docker-desktop/share/icon.original.png"
+        }
     },
     "clock": {
         "tooltip-format": "<big>{:%A, %B %d, %Y}</big>\n<tt><small>{calendar}</small></tt>",
