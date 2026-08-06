@@ -2,6 +2,41 @@
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
+  "permissions": {
+    "allow": [
+      "Bash(git status *)",
+      "Bash(git log *)",
+      "Bash(git diff *)",
+      "Bash(git show *)",
+      "Bash(git check-ignore *)",
+      "Bash(git branch --show-current *)",
+      "Bash(git branch -a *)",
+      "Bash(git rev-parse *)",
+      "Bash(git ls-files *)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(wc *)",
+      "Bash(grep *)",
+      "Bash(find *)",
+      "Bash(sort *)",
+      "Bash(uniq *)",
+      "Bash(jq *)",
+      "Bash(which *)",
+      "Bash(echo *)",
+      "Bash(pwd *)",
+      "Bash(whoami *)",
+      "Bash(gofmt -l *)",
+      "Bash(gofmt -d *)",
+      "Bash(go vet *)",
+      "Bash(go mod download *)",
+      "Bash(go mod tidy *)",
+      "Read(**)"
+    ],
+    "deny": []
+  },
+  "model": "claude-fable-5[1m]",
   "statusLine": {
     "type": "command",
     "command": "sh $HOME/.claude/statusline-command.sh"
@@ -46,7 +81,11 @@
     "mode": "hold"
   },
   "prefersReducedMotion": true,
+  "editorMode": "vim",
+  "verbose": true,
+  "autoCompactEnabled": false,
   "teammateMode": "tmux",
-  "voiceEnabled": true,
-  "agentPushNotifEnabled": true
+  "remoteControlAtStartup": false,
+  "agentPushNotifEnabled": true,
+  "voiceEnabled": true
 }
