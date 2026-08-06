@@ -1,7 +1,9 @@
 #!/bin/sh
 input=$(cat)
 cwd=$(echo "$input" | jq -r '.cwd')
+model=$(echo "$input" | jq -r '.model.display_name // empty')
 printf '\033[01;32m%s@%s\033[00m:\033[01;34m%s\033[00m' "$(whoami)" "$(hostname -s)" "$cwd"
+[ -n "$model" ] && printf ' \033[00;35m[%s]\033[00m' "$model"
 
 ctx_pct=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
 ctx_size=$(echo "$input" | jq -r '.context_window.context_window_size // empty')
