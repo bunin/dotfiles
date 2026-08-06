@@ -64,7 +64,9 @@
         "on-click-middle": "close",
         "sort-by-app-id": true,
         "app_ids-mapping": {
-            "jetbrains-pycharm": "jetbrains-pycharm-08892197-f2bf-44ff-af1f-8a3bcd005f0e"
+            "jetbrains-pycharm": "jetbrains-pycharm-08892197-f2bf-44ff-af1f-8a3bcd005f0e",
+            "Docker Desktop": "docker-desktop",
+            "jetbrains-goland": "jetbrains-goland-1bd81615-13e7-4d32-b332-6a76ab9cc47c"
         }
     },
     "niri/language": {
