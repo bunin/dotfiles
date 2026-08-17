@@ -21,3 +21,8 @@ end
 
 # brew runs as user `homebrew`, which cannot traverse ~/Library (mode 700)
 set -gx HOMEBREW_CASK_OPTS "--fontdir=/Library/Fonts"
+
+# Neovim everywhere: git, kubectl edit, crontab, fzf, etc.
+# `vim` is a function (functions/vim.fish); `command vim` still reaches /usr/bin/vim
+set -gx EDITOR nvim
+set -gx VISUAL nvim

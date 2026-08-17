@@ -30,11 +30,17 @@ of the repo.
 mkdir -p ~/.config/fish/functions
 ln -sf "$PWD/.config/fish/config.fish" ~/.config/fish/config.fish
 ln -sf "$PWD/.config/fish/functions/brew.fish" ~/.config/fish/functions/brew.fish
+ln -sf "$PWD/.config/fish/functions/vim.fish" ~/.config/fish/functions/vim.fish
 ```
 
 `brew.fish` runs Homebrew as the dedicated `homebrew` user; `HOMEBREW_CASK_OPTS`
 in `config.fish` keeps cask fonts out of `~/Library`, which that user cannot
 read.
+
+`vim.fish` makes `vim` run Neovim; `config.fish` sets `EDITOR`/`VISUAL` to it so
+git, `kubectl edit`, and friends agree. `command vim` still reaches the system
+Vim — note macOS Vim lacks `+xterm_clipboard`, so `clipboard=unnamedplus` is
+silently a no-op there.
 
 ### ~/.claude
 
@@ -51,4 +57,5 @@ ln -sf "$PWD/.claude/statusline-command.sh" ~/.claude/statusline-command.sh
 ```sh
 mkdir -p ~/.gemini
 ln -sf "$PWD/.gemini/settings.json" ~/.gemini/settings.json
+ln -sf "$PWD/.gemini/GEMINI.md" ~/.gemini/GEMINI.md
 ```
