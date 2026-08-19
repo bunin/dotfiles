@@ -46,6 +46,14 @@
             "command": "atuin hook claude-code"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -n \"$TMUX_PANE\" ] && tmux set-window-option -u -t \"$TMUX_PANE\" @claude_waiting >/dev/null 2>&1 || true"
+          }
+        ]
       }
     ],
     "PostToolUseFailure": [
@@ -55,6 +63,14 @@
           {
             "type": "command",
             "command": "atuin hook claude-code"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -n \"$TMUX_PANE\" ] && tmux set-window-option -u -t \"$TMUX_PANE\" @claude_waiting >/dev/null 2>&1 || true"
           }
         ]
       }
