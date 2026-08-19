@@ -79,6 +79,46 @@
           }
         ]
       }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -n \"$TMUX_PANE\" ] && tmux set-window-option -t \"$TMUX_PANE\" @claude_waiting 1 >/dev/null 2>&1 || true"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -n \"$TMUX_PANE\" ] && tmux set-window-option -t \"$TMUX_PANE\" @claude_waiting 1 >/dev/null 2>&1 || true"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -n \"$TMUX_PANE\" ] && tmux set-window-option -u -t \"$TMUX_PANE\" @claude_waiting >/dev/null 2>&1 || true"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -n \"$TMUX_PANE\" ] && tmux set-window-option -u -t \"$TMUX_PANE\" @claude_waiting >/dev/null 2>&1 || true"
+          }
+        ]
+      }
     ]
   },
   "statusLine": {
@@ -117,5 +157,7 @@
   "teammateMode": "tmux",
   "remoteControlAtStartup": false,
   "agentPushNotifEnabled": true,
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "preferredNotifChannel": "terminal_bell",
+  "inputNeededNotifEnabled": true
 }
