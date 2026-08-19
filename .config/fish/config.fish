@@ -1,19 +1,22 @@
-# The following lines were added by Docker Desktop to add commands to your PATH.
-export PATH="$PATH:/Users/s9s/.docker/bin"
-# End of Docker Desktop section.
+# fish_add_path dedupes against fish_user_paths, not $PATH, so paths already set
+# by universals would be added twice.
+for dir in $HOME/.docker/bin $HOME/go/bin
+    test -d $dir; and not contains -- $dir $PATH; and set -gx PATH $PATH $dir
+end
+
+for dir in $HOME/.local/bin
+    test -d $dir; and not contains -- $dir $PATH; and set -gx PATH $dir $PATH
+end
+
+# pnpm
+set -gx PNPM_HOME $HOME/Library/pnpm
+test -d $PNPM_HOME; and not contains -- $PNPM_HOME $PATH; and set -gx PATH $PNPM_HOME $PATH
 
 if status is-interactive
     # Commands to run in interactive sessions can go here
     set -g theme_display_k8s_context yes
     set -g theme_display_k8s_namespace yes
 end
-
-# pnpm
-set -gx PNPM_HOME "/Users/s9s/Library/pnpm"
-if not string match -q -- $PNPM_HOME $PATH
-  set -gx PATH "$PNPM_HOME" $PATH
-end
-# pnpm end
 
 if status is-interactive
     atuin init fish | source

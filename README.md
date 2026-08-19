@@ -13,6 +13,7 @@ cd dotfiles
 
 ```sh
 ln -sf "$PWD/.config/alacritty" ~/.config/alacritty
+ln -sf "$PWD/.config/mako" ~/.config/mako
 ln -sf "$PWD/.config/niri" ~/.config/niri
 ln -sf "$PWD/.config/nvim" ~/.config/nvim
 ln -sf "$PWD/.config/tmux" ~/.config/tmux
