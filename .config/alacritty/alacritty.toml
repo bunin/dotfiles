@@ -47,6 +47,11 @@ magenta = '#f4005f'
 cyan    = '#58d1eb'
 white   = '#f6f6ef'
 
+[bell]
+animation = "EaseOut"
+duration = 60 # set to 0 to disable the flash entirely
+color = '#625e4c'
+
 [hints]
 alphabet = "jksdhfgali"
 
