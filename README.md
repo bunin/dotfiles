@@ -16,9 +16,18 @@ ln -sf "$PWD/.config/alacritty" ~/.config/alacritty
 ln -sf "$PWD/.config/mako" ~/.config/mako
 ln -sf "$PWD/.config/niri" ~/.config/niri
 ln -sf "$PWD/.config/nvim" ~/.config/nvim
-ln -sf "$PWD/.config/tmux" ~/.config/tmux
 ln -sf "$PWD/.config/waybar" ~/.config/waybar
 ln -sf "$PWD/.config/xdg-desktop-portal" ~/.config/xdg-desktop-portal
+```
+
+### ~/.config/tmux
+
+Linked per file, not as a whole directory — tpm installs plugins into
+`~/.config/tmux/plugins/`, which have no business in the repo.
+
+```sh
+mkdir -p ~/.config/tmux
+ln -sf "$PWD/.config/tmux/tmux.conf" ~/.config/tmux/tmux.conf
 ```
 
 ### ~/.config/fish
