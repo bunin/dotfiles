@@ -32,16 +32,17 @@ mkdir -p ~/.config/fish/functions
 ln -sf "$PWD/.config/fish/config.fish" ~/.config/fish/config.fish
 ln -sf "$PWD/.config/fish/functions/brew.fish" ~/.config/fish/functions/brew.fish
 ln -sf "$PWD/.config/fish/functions/vim.fish" ~/.config/fish/functions/vim.fish
+ln -sf "$PWD/.config/fish/functions/vi.fish" ~/.config/fish/functions/vi.fish
 ```
 
 `brew.fish` runs Homebrew as the dedicated `homebrew` user. `-H` points `HOME` at
 that user, so Homebrew never reaches for `~/Library` (mode 700, unreadable to it)
 and no `HOMEBREW_CACHE`/`HOMEBREW_CASK_OPTS` overrides are needed.
 
-`vim.fish` makes `vim` run Neovim; `config.fish` sets `EDITOR`/`VISUAL` to it so
-git, `kubectl edit`, and friends agree. `command vim` still reaches the system
-Vim — note macOS Vim lacks `+xterm_clipboard`, so `clipboard=unnamedplus` is
-silently a no-op there.
+`vim.fish` and `vi.fish` make `vim`/`vi` run Neovim; `config.fish` sets
+`EDITOR`/`VISUAL`/`SUDO_EDITOR` to it so git, `kubectl edit`, and friends agree.
+`command vim` still reaches the system Vim — note macOS Vim lacks
+`+xterm_clipboard`, so `clipboard=unnamedplus` is silently a no-op there.
 
 ### ~/.claude
 
