@@ -53,6 +53,31 @@ and no `HOMEBREW_CACHE`/`HOMEBREW_CASK_OPTS` overrides are needed.
 `command vim` still reaches the system Vim — note macOS Vim lacks
 `+xterm_clipboard`, so `clipboard=unnamedplus` is silently a no-op there.
 
+### Vale
+
+Linked per file, not as a whole directory — Vale writes downloaded packages
+(`styles/`) and other generated state next to `.vale.ini` that should stay out
+of the repo.
+
+Vale looks for the config in `~/Library/Application Support/vale` on macOS and
+in `~/.config/vale` on Linux.
+
+```sh
+# macOS
+mkdir -p ~/Library/Application\ Support/vale
+ln -sf "$PWD/.config/vale/.vale.ini" ~/Library/Application\ Support/vale/.vale.ini
+
+# Linux
+mkdir -p ~/.config/vale
+ln -sf "$PWD/.config/vale/.vale.ini" ~/.config/vale/.vale.ini
+```
+
+Then download the styles the config references:
+
+```sh
+vale sync
+```
+
 ### ~/.claude
 
 ```sh
