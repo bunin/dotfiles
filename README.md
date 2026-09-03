@@ -20,6 +20,36 @@ ln -sf "$PWD/.config/waybar" ~/.config/waybar
 ln -sf "$PWD/.config/xdg-desktop-portal" ~/.config/xdg-desktop-portal
 ```
 
+### ~/.config/hypr
+
+Linked per file, not as a whole directory — Omarchy owns the rest of this
+directory and rewrites parts of it. `monitors.lua` in particular is edited with
+`sed -i` every time the monitor-scaling binding runs, and `sed -i` replaces a
+symlink with a regular file, which would silently detach the repo from the live
+config. Display scale is per-machine anyway, so it stays out of the repo.
+
+```sh
+mkdir -p ~/.config/hypr
+ln -sf "$PWD/.config/hypr/autostart.lua" ~/.config/hypr/autostart.lua
+ln -sf "$PWD/.config/hypr/bindings.lua" ~/.config/hypr/bindings.lua
+ln -sf "$PWD/.config/hypr/looknfeel.lua" ~/.config/hypr/looknfeel.lua
+```
+
+`bindings.lua` replaces Omarchy's ALT+TAB, which only cycles within the current
+workspace, with two switchers that see every workspace: a type-to-filter list
+(`window-switcher`, a personal script in `~/.local/bin`, not in this repo) and
+hyprswitch's visual overlay. `autostart.lua` starts the hyprswitch daemon the
+second one needs.
+
+`looknfeel.lua` detaches the pointer from focus: the cursor no longer warps to a
+window that gains focus, and hovering no longer takes focus. Both matter with the
+scrolling layout, where focus decides which columns are on screen — clicking a
+dock icon would otherwise teleport the cursor, and dragging the cursor across the
+strip would scroll the target back out of view.
+
+`omarchy refresh config hypr/<file>` copies Omarchy's default over one of these
+and drops the symlink. Re-run the matching `ln -sf` after doing that.
+
 ### ~/.config/tmux
 
 Linked per file, not as a whole directory — tpm installs plugins into
