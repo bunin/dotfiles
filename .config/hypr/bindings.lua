@@ -40,3 +40,33 @@ hl.unbind("ALT + TAB")
 hl.unbind("ALT + SHIFT + TAB")
 o.bind("ALT + TAB", "Window switcher (search)", "window-switcher")
 o.bind("ALT + SHIFT + TAB", "Window switcher (visual)", hyprswitch)
+
+-- Vim-style navigation, alongside the arrow keys, which keep their defaults.
+--
+-- The scrolling layout makes every workspace one horizontal strip of columns,
+-- so the two axes split cleanly: H/L walk the strip, J/K walk the workspaces.
+-- Focusing a window up or down has no meaning in a strip, so it stays on the
+-- arrows only.
+hl.unbind("SUPER + H")
+hl.unbind("SUPER + J")
+hl.unbind("SUPER + K")
+hl.unbind("SUPER + L")
+hl.unbind("SUPER + SHIFT + H")
+hl.unbind("SUPER + SHIFT + J")
+hl.unbind("SUPER + SHIFT + K")
+hl.unbind("SUPER + SHIFT + L")
+
+o.bind("SUPER + H", "Focus on left window", hl.dsp.focus({ direction = "l" }))
+o.bind("SUPER + L", "Focus on right window", hl.dsp.focus({ direction = "r" }))
+o.bind("SUPER + J", "Next workspace", hl.dsp.focus({ workspace = "e+1" }))
+o.bind("SUPER + K", "Previous workspace", hl.dsp.focus({ workspace = "e-1" }))
+
+o.bind("SUPER + SHIFT + H", "Swap window to the left", hl.dsp.window.swap({ direction = "l" }))
+o.bind("SUPER + SHIFT + L", "Swap window to the right", hl.dsp.window.swap({ direction = "r" }))
+o.bind("SUPER + SHIFT + J", "Move window to next workspace", hl.dsp.window.move({ workspace = "e+1" }))
+o.bind("SUPER + SHIFT + K", "Move window to previous workspace", hl.dsp.window.move({ workspace = "e-1" }))
+
+-- The three Omarchy defaults that HJKL displaced, rehomed on SUPER+ALT.
+o.bind("SUPER + ALT + H", "Keybindings", "omarchy-menu-keybindings")
+o.bind("SUPER + ALT + J", "Toggle window split", hl.dsp.layout("togglesplit"))
+o.bind("SUPER + ALT + L", "Toggle workspace layout", "omarchy-hyprland-workspace-layout-toggle")

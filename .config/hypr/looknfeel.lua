@@ -13,6 +13,26 @@
 --   },
 -- })
 
+-- https://wiki.hypr.land/Configuring/Layouts/Scrolling-Layout/
+hl.config({
+  general = {
+    -- Niri-like side-scrolling layout everywhere: every workspace is one
+    -- horizontal strip of columns, so SUPER+H/L walk the strip.
+    layout = "scrolling",
+  },
+})
+
+-- https://wiki.hypr.land/Configuring/Binds/
+hl.config({
+  binds = {
+    -- Let SUPER+H/L escape a full-width window. Hyprland otherwise refuses to
+    -- move focus out of one that is fullscreen or maximized (SUPER+F,
+    -- SUPER+ALT+F), which strands you on it in the scrolling layout. Enabled,
+    -- movefocus carries the fullscreen state over to the next column.
+    movefocus_cycles_fullscreen = true,
+  },
+})
+
 -- https://wiki.hypr.land/Configuring/Basics/Variables/#decoration
 -- hl.config({
 --   decoration = {
