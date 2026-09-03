@@ -1,0 +1,30 @@
+{
+  "allowNonWorkspaceAccess": true,
+  "enableTelemetry": false,
+  "notifications": false,
+  "permissions": {
+    "allow": [
+      "read_url(antigravity.google)",
+      "command(which)",
+      "read_url(herdr.dev)",
+      "command(tail)",
+      "command(grep)",
+      "command(ls)",
+      "command(strings)",
+      "command(git diff)",
+      "command(git status)",
+      "command(git log)",
+      "command(git remote)",
+      "command(head)"
+    ]
+  },
+  "runningLightSpeed": "fast",
+  "statusLine": {
+    "type": "",
+    "command": "/home/bunin/.config/agy/statusline.py"
+  },
+  "trustedWorkspaces": [
+    "/home/bunin",
+    "/home/bunin/Projects/bunin/dotfiles"
+  ]
+}
