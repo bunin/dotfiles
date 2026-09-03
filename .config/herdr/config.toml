@@ -113,3 +113,14 @@ show_agent_labels_on_pane_borders = true
 [ui.toast]
 delivery = "system"
 
+# herdr has no URL-hint action - its keys stop at copy_mode and edit_scrollback -
+# and Alacritty's CTRL+SHIFT+U hints read only the visible grid, so a URL cut by
+# a pane border or scrolled off is out of reach there. herdr-url-pick asks the
+# server for the pane's unwrapped scrollback instead and pipes the matches
+# through fzf.
+[[keys.command]]
+key = "prefix+alt+u"
+type = "popup"
+command = "herdr-url-pick"
+width = "70%"
+height = "50%"

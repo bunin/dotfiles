@@ -1,0 +1,66 @@
+#!/bin/bash
+# Fuzzy-pick a URL out of the focused herdr pane and open it.
+#
+# herdr's key actions stop at copy_mode and edit_scrollback, so nothing in it
+# reaches a URL from the keyboard. Alacritty's CTRL+SHIFT+U hints do, but they
+# read the visible grid, where a long URL is cut in two by a pane border and
+# anything scrolled off is gone. This asks the herdr server for the pane's
+# scrollback unwrapped instead, so both cases still match.
+#
+# Bound to PREFIX+ALT+U in ~/.config/herdr/config.toml, as a popup pane.
+set -euo pipefail
+
+# The popup closes the moment this exits, so a message on stderr would flash
+# past unread. herdr's own toasts outlive it.
+die() {
+  herdr notification show "herdr-url-pick" --body "$1" 2>/dev/null ||
+    echo "herdr-url-pick: $1" >&2
+  exit 1
+}
+
+command -v fzf >/dev/null || die "fzf is not installed"
+
+# A custom command inherits HERDR_ACTIVE_PANE_ID; a pane's own shell exports
+# HERDR_PANE_ID. Neither is guaranteed, so fall back to asking the server which
+# pane holds focus.
+pane=${HERDR_ACTIVE_PANE_ID:-${HERDR_PANE_ID:-}}
+if [[ -z $pane ]]; then
+  pane=$(herdr pane current | sed -n 's/.*"pane_id":"\([^"]*\)".*/\1/p')
+fi
+[[ -n $pane ]] || die "no focused pane"
+
+# Parentheses stay out of the match so a markdown link does not carry its
+# closing bracket in; the sed drops punctuation that ends a sentence rather than
+# a URL.
+url_re='(mailto:|gemini:|gopher:|news:|https?:|file:|git:|ssh:|ftp:)[^[:space:]"<>()]+'
+
+# tac puts the newest matches first - that is almost always the one wanted -
+# and awk drops repeats without disturbing that order.
+scrape() {
+  herdr pane read "$pane" --source "$1" --lines 5000 --format text |
+    grep -oE "$url_re" | sed 's/[].,;:!?]*$//' | tac | awk '!seen[$0]++'
+}
+
+mapfile -t urls < <(scrape recent-unwrapped)
+# An unwrapped snapshot taken while the pane is redrawing has come back short
+# once. The wrapped view is built from the same scrollback, so retrying there
+# costs nothing and only misses URLs broken across a line.
+((${#urls[@]})) || mapfile -t urls < <(scrape recent)
+
+((${#urls[@]})) || die "no URLs in this pane"
+
+# --no-sort keeps the newest-first order; ESC leaves without opening anything.
+url=$(printf '%s\n' "${urls[@]}" | fzf --no-sort --prompt "open> ") || exit 0
+
+# omarchy-launch-browser focuses the browser window after opening the URL, which
+# is the half xdg-open leaves undone - but it only exists on Omarchy.
+case "$(uname)" in
+  Darwin) open "$url" ;;
+  *)
+    if command -v omarchy-launch-browser >/dev/null 2>&1; then
+      omarchy-launch-browser "$url"
+    else
+      xdg-open "$url"
+    fi
+    ;;
+esac
