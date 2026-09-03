@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+# Clockify status for Herdr's tab bar. Clockify is polled at most once per TTL;
+# the elapsed time is rendered from the cached start time.
+
+set -u
+
+CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/herdr-clockify"
+STATE="$CACHE_DIR/state"
+ATTEMPT="$CACHE_DIR/attempt"
+TTL="${CLOCKIFY_HERDR_TTL:-60}"
+
+mkdir -p "$CACHE_DIR"
+
+mtime() {
+    stat -c %Y "$1" 2>/dev/null || stat -f %m "$1" 2>/dev/null || echo 0
+}
+
+iso_to_epoch() {
+    local value normalized
+    value=$1
+
+    # GNU date accepts ISO 8601 offsets directly.
+    if date -d "$value" +%s 2>/dev/null; then
+        return
+    fi
+
+    # BSD date needs the colon removed from numeric UTC offsets.
+    case "$value" in
+        *Z)
+            TZ=UTC date -j -f '%Y-%m-%dT%H:%M:%SZ' "$value" +%s 2>/dev/null
+            ;;
+        *)
+            normalized=$(printf '%s' "$value" | sed -E 's/([+-][0-9]{2}):([0-9]{2})$/\1\2/')
+            date -j -f '%Y-%m-%dT%H:%M:%S%z' "$normalized" +%s 2>/dev/null
+            ;;
+    esac
+}
+
+refresh() {
+    local json project desc start epoch tmp
+    tmp="$STATE.tmp.$$"
+    json=$(clockify-cli show -j -i=0 2>/dev/null)
+
+    if [ -z "$json" ] || [ "$json" = "[]" ] || [ "$json" = "null" ]; then
+        printf 'idle\n\n0\n' > "$tmp"
+    else
+        project=$(printf '%s' "$json" | jq -r '.[0].project.name // "" | gsub("[\\r\\n]+"; " ")' 2>/dev/null)
+        desc=$(printf '%s' "$json" | jq -r '.[0].description // "" | gsub("[\\r\\n]+"; " ")' 2>/dev/null)
+        start=$(printf '%s' "$json" | jq -r '.[0].timeInterval.start // ""' 2>/dev/null)
+        epoch=$(iso_to_epoch "$start")
+
+        if [ "${epoch:-0}" -eq 0 ]; then
+            printf 'idle\n\n0\n' > "$tmp"
+        else
+            printf 'running\n%s / %s\n%s\n' "$project" "$desc" "$epoch" > "$tmp"
+        fi
+    fi
+
+    mv -f "$tmp" "$STATE"
+}
+
+now=$(date +%s)
+state_age=$(( now - $(mtime "$STATE") ))
+attempt_age=$(( now - $(mtime "$ATTEMPT") ))
+if { [ ! -f "$STATE" ] || [ "$state_age" -ge "$TTL" ]; } &&
+   { [ ! -f "$ATTEMPT" ] || [ "$attempt_age" -ge "$TTL" ]; }; then
+    # Herdr already runs status commands asynchronously and prevents overlap.
+    # Keep this request in the foreground: Herdr kills background descendants
+    # when the command exits. The attempt timestamp also throttles timeouts.
+    touch "$ATTEMPT"
+    refresh
+fi
+
+[ -f "$STATE" ] || exit 0
+
+{ read -r status; read -r label; read -r epoch; } < "$STATE"
+[ "${status:-}" = running ] || exit 0
+
+d=$(( $(date +%s) - epoch ))
+[ "$d" -lt 0 ] && d=0
+
+printf '%s [%d:%02d:%02d]\n' "$label" $(( d / 3600 )) $(( d % 3600 / 60 )) $(( d % 60 ))

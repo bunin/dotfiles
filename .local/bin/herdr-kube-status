@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Current Kubernetes context and namespace for Herdr's tab bar. `config view`
+# reads kubeconfig only; it does not contact the cluster.
+
+command -v kubectl >/dev/null 2>&1 || exit 0
+
+value=$(kubectl config view --minify \
+    --output 'jsonpath={.current-context}{"\t"}{.contexts[0].context.namespace}' \
+    2>/dev/null) || exit 0
+
+IFS=$'\t' read -r context namespace <<< "$value"
+[ -n "$context" ] || exit 0
+[ -n "${namespace:-}" ] || namespace=default
+
+printf '%s / %s\n' "$context" "$namespace"

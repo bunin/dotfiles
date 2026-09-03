@@ -59,12 +59,25 @@ and drops the symlink. Re-run the matching `ln -sf` after doing that.
 ```sh
 mkdir -p ~/.local/bin
 ln -sf "$PWD/.local/bin/window-switcher" ~/.local/bin/window-switcher
+ln -sf "$PWD/.local/bin/herdr-clockify-status" ~/.local/bin/herdr-clockify-status
+ln -sf "$PWD/.local/bin/herdr-kube-status" ~/.local/bin/herdr-kube-status
 ```
 
 `window-switcher` is the ALT+TAB list from `bindings.lua`: every mapped window
 across every workspace, most-recently-used first, filtered by typing. It needs
 `fuzzel`, `jq`, and `gawk`. Icons come from a class-to-`Icon=` map built out of
 the desktop files, because window classes are not icon names.
+
+`herdr-clockify-status` ports the old `tmux-clockify` status segment to Herdr's
+tab row: while a timer is running it shows `project / description [H:MM:SS]`.
+Herdr redraws the elapsed time every second, but the script refreshes Clockify
+at most once a minute and shows nothing when no timer runs. Herdr runs status
+commands asynchronously, so the occasional API refresh does not block its UI.
+
+`herdr-kube-status` adds the current Kubernetes `context / namespace` beside the
+Clockify timer. It reads the local kubeconfig every five seconds without
+contacting the cluster, uses `default` when a context has no explicit namespace,
+and hides itself when no current context is configured.
 
 ### ~/.config/tmux
 
@@ -92,6 +105,10 @@ to workspace, window to tab — so the prefix and the splits stay where
 `tmux.conf` put them. `default_shell` names fish outright because herdr
 otherwise takes `$SHELL` from whatever started its server, which is the shell of
 that terminal rather than the login shell.
+
+The tab row is also Herdr's status bar. Its right side carries zoom state, the
+cached `herdr-clockify-status` command, Kubernetes context and namespace, and
+the server hostname, in that order, with centered dots separating the segments.
 
 `herdr server reload-config`, or `CTRL+SPACE q`, applies changes to the running
 server. Panes that are already open keep the shell they started with.
