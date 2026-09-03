@@ -1,0 +1,9 @@
+[tools]
+agy = "latest"
+claude = "latest"
+codex = "latest"
+gh = "latest"
+kubectl = "latest"
+kubectx = "latest"
+kubens = "latest"
+node = "26.8.1"
