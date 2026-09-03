@@ -73,8 +73,19 @@ o.bind("SUPER + L", "Focus on right window", hl.dsp.focus({ direction = "r" }))
 o.bind("SUPER + J", "Next workspace", hl.dsp.focus({ workspace = "e+1" }))
 o.bind("SUPER + K", "Previous workspace", hl.dsp.focus({ workspace = "e-1" }))
 
-o.bind("SUPER + SHIFT + H", "Swap window to the left", hl.dsp.window.swap({ direction = "l" }))
-o.bind("SUPER + SHIFT + L", "Swap window to the right", hl.dsp.window.swap({ direction = "r" }))
+-- Omarchy's swap bindings, the arrow keys included, dispatch swapwindow, which
+-- belongs to the tiling layouts. Scrolling ignores it, and it refuses a
+-- fullscreen or maximized window outright ("Can't swap fullscreen window"), so
+-- on a scrolling workspace it never fires. swapcol is the layout's own message
+-- and swaps whole columns; the swap wraps, so the leftmost column sent left
+-- reappears at the end of the strip.
+hl.unbind("SUPER + SHIFT + LEFT")
+hl.unbind("SUPER + SHIFT + RIGHT")
+
+o.bind("SUPER + SHIFT + H", "Swap window to the left", hl.dsp.layout("swapcol l"))
+o.bind("SUPER + SHIFT + L", "Swap window to the right", hl.dsp.layout("swapcol r"))
+o.bind("SUPER + SHIFT + LEFT", "Swap window to the left", hl.dsp.layout("swapcol l"))
+o.bind("SUPER + SHIFT + RIGHT", "Swap window to the right", hl.dsp.layout("swapcol r"))
 o.bind("SUPER + SHIFT + J", "Move window to next workspace", hl.dsp.window.move({ workspace = "e+1" }))
 o.bind("SUPER + SHIFT + K", "Move window to previous workspace", hl.dsp.window.move({ workspace = "e-1" }))
 
