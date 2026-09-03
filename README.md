@@ -104,12 +104,19 @@ mkdir -p ~/.local/bin
 ln -sf "$PWD/.local/bin/window-switcher" ~/.local/bin/window-switcher
 ln -sf "$PWD/.local/bin/herdr-clockify-status" ~/.local/bin/herdr-clockify-status
 ln -sf "$PWD/.local/bin/herdr-kube-status" ~/.local/bin/herdr-kube-status
+ln -sf "$PWD/.local/bin/herdr-url-pick" ~/.local/bin/herdr-url-pick
 ```
 
 `window-switcher` is the ALT+TAB list from `bindings.lua`: every mapped window
 across every workspace, most-recently-used first, filtered by typing. It needs
 `fuzzel`, `jq`, and `gawk`. Icons come from a class-to-`Icon=` map built out of
 the desktop files, because window classes are not icon names.
+
+`herdr-url-pick` is `PREFIX+ALT+U` from `config.toml` below: the URLs in the
+focused herdr pane, newest first, filtered by typing in `fzf`, opened the same
+way the Alacritty hint opens one. It exists because the hint reads the visible
+grid, where a pane border cuts a long URL in two and anything scrolled off is
+gone; this asks the herdr server for the pane's scrollback unwrapped instead.
 
 `herdr-clockify-status` ports the old `tmux-clockify` status segment to Herdr's
 tab row: while a timer is running it shows `project / description [H:MM:SS]`.
@@ -152,6 +159,18 @@ that terminal rather than the login shell.
 The tab row is also Herdr's status bar. Its right side carries zoom state, the
 cached `herdr-clockify-status` command, Kubernetes context and namespace, and
 the server hostname, in that order, with centered dots separating the segments.
+
+`mouse_capture` keeps herdr's own mouse UI — click a pane to focus it, click a
+tab, drag a border — at the price of the terminal's middle-click paste, since
+herdr reports mouse events to itself instead. `SHIFT` is the way out: Alacritty
+handles a shift-modified mouse event rather than reporting it, so `SHIFT+drag`
+selects into the primary buffer and `SHIFT+MIDDLE` pastes from it. Plain
+selection inside herdr goes to the clipboard only — it travels as OSC 52 `52;c`,
+which has no primary-buffer half.
+
+`[[keys.command]]` binds `PREFIX+ALT+U` to `herdr-url-pick` in a popup pane,
+since herdr's own actions stop at `copy_mode` and `edit_scrollback` and none of
+them reaches a URL.
 
 `herdr server reload-config`, or `CTRL+SPACE q`, applies changes to the running
 server. Panes that are already open keep the shell they started with.
