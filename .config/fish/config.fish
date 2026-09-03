@@ -28,6 +28,13 @@ if status is-interactive
     atuin init fish | source
 end
 
+# Non-interactive bash reads no startup file on its own, so `k`/`kc`/`kn` would
+# be missing from `bash -c` and from anything that shells out that way. BASH_ENV
+# names a file for it to read; ~/.bashrc sources the same one for interactive
+# shells. It costs every bash script started from this session one extra source,
+# which is why that file stays silent and side-effect free.
+test -f $HOME/.config/bash/env.bash; and set -gx BASH_ENV $HOME/.config/bash/env.bash
+
 # Neovim everywhere: git, kubectl edit, crontab, fzf, etc.
 # `vim`/`vi` are functions (functions/vim.fish, functions/vi.fish);
 # `command vim` still reaches /usr/bin/vim.
