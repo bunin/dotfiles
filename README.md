@@ -36,10 +36,9 @@ ln -sf "$PWD/.config/hypr/looknfeel.lua" ~/.config/hypr/looknfeel.lua
 ```
 
 `bindings.lua` replaces Omarchy's ALT+TAB, which only cycles within the current
-workspace, with two switchers that see every workspace: a type-to-filter list
-(`window-switcher`, a personal script in `~/.local/bin`, not in this repo) and
-hyprswitch's visual overlay. `autostart.lua` starts the hyprswitch daemon the
-second one needs.
+workspace, with two switchers that see every workspace: `window-switcher` below,
+and hyprswitch's visual overlay. `autostart.lua` starts the hyprswitch daemon
+the second one needs.
 
 `looknfeel.lua` detaches the pointer from focus: the cursor no longer warps to a
 window that gains focus, and hovering no longer takes focus. Both matter with the
@@ -49,6 +48,18 @@ strip would scroll the target back out of view.
 
 `omarchy refresh config hypr/<file>` copies Omarchy's default over one of these
 and drops the symlink. Re-run the matching `ln -sf` after doing that.
+
+### ~/.local/bin
+
+```sh
+mkdir -p ~/.local/bin
+ln -sf "$PWD/.local/bin/window-switcher" ~/.local/bin/window-switcher
+```
+
+`window-switcher` is the ALT+TAB list from `bindings.lua`: every mapped window
+across every workspace, most-recently-used first, filtered by typing. It needs
+`fuzzel`, `jq`, and `gawk`. Icons come from a class-to-`Icon=` map built out of
+the desktop files, because window classes are not icon names.
 
 ### ~/.config/tmux
 
