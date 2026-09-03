@@ -93,3 +93,7 @@ o.bind("SUPER + SHIFT + K", "Move window to previous workspace", hl.dsp.window.m
 o.bind("SUPER + ALT + H", "Keybindings", "omarchy-menu-keybindings")
 o.bind("SUPER + ALT + J", "Toggle window split", hl.dsp.layout("togglesplit"))
 o.bind("SUPER + ALT + L", "Toggle workspace layout", "omarchy-hyprland-workspace-layout-toggle")
+
+-- Close active window (alongside default SUPER+W)
+o.bind("SUPER + Q", "Close window", hl.dsp.window.close())
+

@@ -335,10 +335,9 @@ ln -sf "$PWD/.gemini/settings.json" ~/.gemini/settings.json
 ln -sf "$PWD/.gemini/GEMINI.md" ~/.gemini/GEMINI.md
 mkdir -p ~/.gemini/antigravity-cli
 ln -sf "$PWD/.gemini/antigravity-cli/settings.json" ~/.gemini/antigravity-cli/settings.json
-chmod 444 "$PWD/.gemini/antigravity-cli/settings.json"
 ```
 
-`chmod 444` locks `settings.json` so background `agy --print` runs (such as the
-Omarchy quota refresher) cannot drop `"notifications": false` due to Go's
-`omitempty` serialization bug.
+`omarchy-agent-usage-antigravity` automatically preserves `"notifications": false`
+and maintains this symlink whenever it queries `agy --print '/quota'`, working
+around Go's `omitempty` serialization bug.
 
