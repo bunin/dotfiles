@@ -34,23 +34,24 @@
 -- ALT+TAB       type-to-filter list (fuzzel); most-recent window is preselected
 -- ALT+SHIFT+TAB hyprswitch's visual overlay with live previews; its daemon is
 --               started in autostart.lua
--- hyprswitch's own --key has to match the key the binding fires on, or holding
--- ALT and tapping it again will not advance the selection.
-local function hyprswitch(key, extra)
-  return "hyprswitch gui --mod-key ALT_L --key "
-    .. key
-    .. " --close mod-key-release --reverse-key=mod=shift"
-    .. (extra or "")
-end
+local hyprswitch = "hyprswitch gui --mod-key ALT_L --key tab --close mod-key-release --reverse-key=mod=shift"
 
 hl.unbind("ALT + TAB")
 hl.unbind("ALT + SHIFT + TAB")
 o.bind("ALT + TAB", "Window switcher (search)", "window-switcher")
-o.bind("ALT + SHIFT + TAB", "Window switcher (visual)", hyprswitch("tab"))
+o.bind("ALT + SHIFT + TAB", "Window switcher (visual)", hyprswitch)
 
--- ALT+` cycles only the windows of the focused app, the way CMD+` does on
--- macOS. Hold ALT and tap ` to advance; add SHIFT to go back.
-o.bind("ALT + grave", "Window switcher (same app)", hyprswitch("grave", " --filter-same-class"))
+-- SUPER+` steps through the focused app's own windows, the way CMD+` does on
+-- macOS. hyprswitch's simple mode switches on the spot instead of opening the
+-- overlay the two bindings above use: one press is one switch, and there is
+-- nothing left on screen to dismiss.
+--
+-- SUPER rather than ALT, because Hyprland forwards the modifier to the focused
+-- window even when it swallows the key the binding fires on. GTK reads that as
+-- a bare ALT tap and pops the menu bar open behind the switch. SUPER is not a
+-- menu accelerator anywhere.
+o.bind("SUPER + grave", "Next window of the same app", "hyprswitch simple --filter-same-class")
+o.bind("SUPER + SHIFT + grave", "Previous window of the same app", "hyprswitch simple --filter-same-class --reverse")
 
 -- Vim-style navigation, alongside the arrow keys, which keep their defaults.
 --
