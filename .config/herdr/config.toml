@@ -93,8 +93,15 @@ prompt_new_tab_name = false
 # set -g mouse on
 mouse_capture = true
 
-# status-right had the zoom flag followed by #h
-tab_bar_right = [{ type = "zoom" }, { type = "hostname" }]
+# Herdr's tab row doubles as its tmux-style status bar. The Clockify command
+# redraws elapsed time every second, while the script caches API calls for 60s.
+tab_bar_right = [
+  { type = "zoom" },
+  { type = "command", command = "~/.local/bin/herdr-clockify-status", interval_seconds = 1, timeout_seconds = 30 },
+  { type = "command", command = "~/.local/bin/herdr-kube-status", interval_seconds = 5, timeout_seconds = 2 },
+  { type = "hostname" },
+]
+tab_bar_right_separator = " · "
 
 # set -g set-titles on / set -g set-titles-string '#h:#W', where tmux's #W was
 # the basename of the pane cwd. This is what Hyprland shows in the group bar,
@@ -105,3 +112,4 @@ agent_panel_sort = "spaces"
 show_agent_labels_on_pane_borders = true
 [ui.toast]
 delivery = "system"
+
