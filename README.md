@@ -71,6 +71,26 @@ mkdir -p ~/.config/tmux
 ln -sf "$PWD/.config/tmux/tmux.conf" ~/.config/tmux/tmux.conf
 ```
 
+### ~/.config/herdr
+
+Linked per file, not as a whole directory — herdr keeps its sockets, logs, and
+session state (`herdr.sock`, `herdr-server.log`, `session.json`) next to the
+config, and none of that belongs in the repo.
+
+```sh
+mkdir -p ~/.config/herdr
+ln -sf "$PWD/.config/herdr/config.toml" ~/.config/herdr/config.toml
+```
+
+`config.toml` translates the tmux config above into herdr's vocabulary — session
+to workspace, window to tab — so the prefix and the splits stay where
+`tmux.conf` put them. `default_shell` names fish outright because herdr
+otherwise takes `$SHELL` from whatever started its server, which is the shell of
+that terminal rather than the login shell.
+
+`herdr server reload-config`, or `CTRL+SPACE q`, applies changes to the running
+server. Panes that are already open keep the shell they started with.
+
 ### ~/.config/fish
 
 Linked per file, not as a whole directory — fish writes generated state next to
