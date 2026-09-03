@@ -1,0 +1,91 @@
+#!/bin/bash
+# Fuzzy-search window switcher spanning every workspace.
+#
+# Lists all mapped windows most-recently-used first, pipes them through
+# fuzzel's dmenu mode for type-to-filter, and focuses the pick.
+# Bound to ALT+TAB in ~/.config/hypr/bindings.lua.
+set -euo pipefail
+
+command -v fuzzel >/dev/null || {
+  notify-send "window-switcher" "fuzzel is not installed" 2>/dev/null
+  exit 1
+}
+
+# Window classes are not icon names: Alacritty's icon lives in
+# /usr/share/pixmaps, and web apps carry generated classes. Build a
+# class -> Icon= map from the desktop files, keyed by both the desktop-file id
+# and StartupWMClass, so either spelling resolves.
+declare -A icon_by_class
+while IFS=$'\t' read -r key icon; do
+  [[ -n $key ]] && icon_by_class["$key"]=$icon
+done < <(
+  gawk -F= '
+    FNR == 1 {
+      icon = ""; wmclass = ""
+      base = FILENAME; sub(/.*\//, "", base); sub(/\.desktop$/, "", base)
+    }
+    /^Icon=/            && icon == ""    { icon = $2 }
+    /^StartupWMClass=/  && wmclass == "" { wmclass = $2 }
+    ENDFILE {
+      if (icon != "") {
+        print base "\t" icon
+        if (wmclass != "") print wmclass "\t" icon
+      }
+    }
+  ' /usr/share/applications/*.desktop \
+    "$HOME"/.local/share/applications/*.desktop 2>/dev/null
+)
+
+icon_for() {
+  local class=$1
+  local icon=${icon_by_class[$class]:-${icon_by_class[${class,,}]:-}}
+  if [[ -z $icon ]]; then
+    case $class in
+      chrome-*|Chromium*) icon=chromium ;;   # web apps get a generated class
+      *) icon=${class,,} ;;                  # fuzzel renders blank if missing
+    esac
+  fi
+  printf '%s' "$icon"
+}
+
+# focusHistoryID: 0 is the focused window, 1 the previously focused, and so on.
+# Sorting by it puts the window you were just in at the top, so ALT+TAB then
+# Enter behaves like a conventional alt-tab.
+addresses=()
+labels=()
+icons=()
+
+while IFS=$'\t' read -r address workspace class title; do
+  [[ -n $address ]] || continue
+  addresses+=("$address")
+  labels+=("$(printf '%-4s  %-22.22s  %s' "$workspace" "$class" "$title")")
+  icons+=("$(icon_for "$class")")
+done < <(
+  hyprctl clients -j | jq -r '
+    [ .[] | select(.mapped) ]
+    | sort_by(.focusHistoryID)
+    | .[]
+    | [ .address, (.workspace.name | tostring), .class, .title ]
+    | @tsv
+  '
+)
+
+(( ${#addresses[@]} )) || exit 0
+
+# --index returns the selected entry's position, so the address lookup never
+# depends on matching the displayed text back (titles change, and can repeat).
+index=$(
+  for i in "${!labels[@]}"; do
+    printf '%s\x00icon\x1f%s\n' "${labels[i]}" "${icons[i]}"
+  done | fuzzel --dmenu --index --prompt '  ' --width 90 --lines 15
+) || exit 0
+
+[[ $index =~ ^[0-9]+$ ]] || exit 0
+address=${addresses[index]:-}
+[[ -n $address ]] || exit 0
+
+# Omarchy drives Hyprland through a Lua config, so hyprctl parses its dispatch
+# argument as Lua. Same call and legacy fallback that Omarchy's own
+# omarchy-hyprland-focus-app uses.
+hyprctl dispatch "hl.dsp.focus({ window = \"address:$address\" })" >/dev/null 2>&1 ||
+  hyprctl dispatch focuswindow "address:$address" >/dev/null
