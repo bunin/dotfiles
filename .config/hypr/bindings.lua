@@ -34,12 +34,23 @@
 -- ALT+TAB       type-to-filter list (fuzzel); most-recent window is preselected
 -- ALT+SHIFT+TAB hyprswitch's visual overlay with live previews; its daemon is
 --               started in autostart.lua
-local hyprswitch = "hyprswitch gui --mod-key ALT_L --key tab --close mod-key-release --reverse-key=mod=shift"
+-- hyprswitch's own --key has to match the key the binding fires on, or holding
+-- ALT and tapping it again will not advance the selection.
+local function hyprswitch(key, extra)
+  return "hyprswitch gui --mod-key ALT_L --key "
+    .. key
+    .. " --close mod-key-release --reverse-key=mod=shift"
+    .. (extra or "")
+end
 
 hl.unbind("ALT + TAB")
 hl.unbind("ALT + SHIFT + TAB")
 o.bind("ALT + TAB", "Window switcher (search)", "window-switcher")
-o.bind("ALT + SHIFT + TAB", "Window switcher (visual)", hyprswitch)
+o.bind("ALT + SHIFT + TAB", "Window switcher (visual)", hyprswitch("tab"))
+
+-- ALT+` cycles only the windows of the focused app, the way CMD+` does on
+-- macOS. Hold ALT and tap ` to advance; add SHIFT to go back.
+o.bind("ALT + grave", "Window switcher (same app)", hyprswitch("grave", " --filter-same-class"))
 
 -- Vim-style navigation, alongside the arrow keys, which keep their defaults.
 --
