@@ -119,6 +119,28 @@ and no `HOMEBREW_CACHE`/`HOMEBREW_CASK_OPTS` overrides are needed.
 `command vim` still reaches the system Vim — note macOS Vim lacks
 `+xterm_clipboard`, so `clipboard=unnamedplus` is silently a no-op there.
 
+### ~/.config/mise
+
+Linked per file, not as a whole directory — mise keeps machine-local settings
+(`settings.toml`) alongside `config.toml`, and installed toolchains under
+`~/.local/share/mise`, none of which belong in the repo.
+
+```sh
+mkdir -p ~/.config/mise
+ln -sf "$PWD/.config/mise/config.toml" ~/.config/mise/config.toml
+```
+
+`config.toml` is the global tool list `config.fish` activates. `mise use -g
+<tool>` writes through the symlink rather than replacing it, so installing a
+tool edits the repo file directly and shows up as a diff here. Install
+everything already listed with:
+
+```sh
+mise install
+```
+
+`node` names an exact version on purpose. Everything else tracks `latest`.
+
 ### Vale
 
 Linked per file, not as a whole directory — Vale writes downloaded packages
