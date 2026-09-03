@@ -92,3 +92,15 @@ hl.config({
     follow_mouse = 2,
   },
 })
+
+-- https://wiki.hypr.land/Configuring/Basics/Window-Rules/
+o.window(".*", {
+  -- Omarchy draws every window slightly transparent, "0.985 0.96" for
+  -- active/inactive and "1.0 0.985" for browsers, so the wallpaper sits behind
+  -- the window you are working in. Keep the transparency as a hint of which
+  -- window has focus and take it off the focused one. "override" makes each
+  -- value absolute rather than a multiplier on the rules above, which this
+  -- file is required after, and window rules are last-match-wins. The third
+  -- value is left out, so fullscreen windows follow fullscreen_opacity, 1.0.
+  opacity = "1.0 override 0.96 override",
+})

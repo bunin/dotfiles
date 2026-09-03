@@ -46,6 +46,11 @@ scrolling layout, where focus decides which columns are on screen — clicking a
 dock icon would otherwise teleport the cursor, and dragging the cursor across the
 strip would scroll the target back out of view.
 
+`looknfeel.lua` also takes Omarchy's window transparency off the focused window
+and leaves it on the others. The wallpaper no longer shows through whatever you
+work in, while an unfocused window still reads as unfocused. `SUPER+BACKSPACE`
+toggles transparency for one window.
+
 `omarchy refresh config hypr/<file>` copies Omarchy's default over one of these
 and drops the symlink. Re-run the matching `ln -sf` after doing that.
 
