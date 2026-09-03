@@ -1,66 +1,59 @@
-[env]
-# Bootstrap PATH only — [env] cannot expand $HOME, so per-user dirs live in config.fish
-PATH = "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+# Omarchy's default Alacritty config, plus the [hints] block at the bottom.
+#
+# Kept as a whole copy rather than an overlay: a repo file that only added
+# [hints] would still be the top-level config, so it would have to restate
+# everything else anyway. The cost is that an `omarchy update` changing the
+# packaged default does not reach here - diff against
+# /usr/share/omarchy/config/alacritty/alacritty.toml after an update.
+general.import = [ "~/.local/state/omarchy/current/theme/alacritty.toml" ]
 
-[window]
-decorations = "None" # This might be default, but explicitly setting for clarity
-startup_mode = "Maximized"
+[env]
+TERM = "xterm-256color"
 
 [terminal]
-
-[terminal.shell]
-program = "/bin/sh"
-args = ["-c", "exec tmux new-session"]
+osc52 = "CopyPaste"
 
 [font]
-size = 14.0
-normal = { family = "Hack Nerd Font", style = "Regular" }
-italic = { family = "Hack Nerd Font", style = "Italic" }
-bold = { family = "Hack Nerd Font", style = "Bold" }
-bold_italic = { family = "Hack Nerd Font", style = "Bold Italic" }
+normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
+bold = { family = "JetBrainsMono Nerd Font", style = "Bold" }
+italic = { family = "JetBrainsMono Nerd Font", style = "Italic" }
+size = 9
 
-# Colours (Monokai Charcoal)
+[window]
+padding.x = 14
+padding.y = 14
+decorations = "None"
 
-# Default Colours
-[colors.primary]
-background = '#000000'
-foreground = '#FFFFFF'
+[keyboard]
+bindings = [
+{ key = "Insert", mods = "Shift", action = "Paste" },
+{ key = "Insert", mods = "Control", action = "Copy" },
+# Send Shift+Return as CSI-u so TUIs can distinguish it from Return without treating it as Alt+Return.
+{ key = "Return", mods = "Shift", chars = "\u001B[13;2u" },
+# Legacy encoding sends Alt+Shift+Return the same as Alt+Return; send CSI-u so tmux can match M-S-Enter.
+{ key = "Return", mods = "Alt|Shift", chars = "\u001B[13;4u" }
+]
 
-# Normal Colours
-[colors.normal]
-black   = '#1a1a1a'
-red     = '#f4005f'
-green   = '#98e024'
-yellow  = '#fa8419'
-blue    = '#9d65ff'
-magenta = '#f4005f'
-cyan    = '#58d1eb'
-white   = '#c4c5b5'
-
-# Bright Colours
-[colors.bright]
-black   = '#625e4c'
-red     = '#f4005f'
-green   = '#98e024'
-yellow  = '#e0d561'
-blue    = '#9d65ff'
-magenta = '#f4005f'
-cyan    = '#58d1eb'
-white   = '#f6f6ef'
-
-[bell]
-animation = "EaseOut"
-duration = 60 # set to 0 to disable the flash entirely
-color = '#625e4c'
-
+# CTRL+SHIFT+U labels every URL on screen with a letter from `alphabet`, and the
+# letter opens it. Alacritty handles the binding itself, so it still works with
+# herdr in the foreground - herdr has no URL action of its own, its keys stop at
+# copy_mode and edit_scrollback. What Alacritty cannot see is a URL cut in two by
+# a herdr pane border; `herdr-url-pick` on PREFIX+ALT+U covers that case.
 [hints]
 alphabet = "jksdhfgali"
 
 [[hints.enabled]]
-command = { program = "sh", args = ["-c", "case \"$(uname)\" in Darwin) open \"$0\" ;; *) ~/.config/niri/scripts/open-and-focus.sh \"$0\" ;; esac"] }
+# omarchy-launch-browser opens the URL in the default browser and then focuses
+# its window, which is the half a bare xdg-open leaves undone. macOS `open` does
+# both. The old command here called a ~/.config/niri script that the move to
+# Hyprland left behind, so the hint highlighted URLs and then did nothing.
+command = { program = "sh", args = ["-c", "case \"$(uname)\" in Darwin) open \"$0\" ;; *) command -v omarchy-launch-browser >/dev/null && exec omarchy-launch-browser \"$0\" || exec xdg-open \"$0\" ;; esac"] }
 hyperlinks = true
 post_processing = true
 persist = false
+# Alt+click reaches Alacritty only while the foreground app is not reporting
+# mouse events, so it is dead inside herdr, which claims the mouse through
+# ui.mouse_capture. The keyboard binding is the one that works there.
 mouse = { enabled = true, mods = "Alt" }
 binding = { key = "U", mods = "Control|Shift" }
 regex = "(mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)[^\\u0000-\\u001F\\u007F-\\u009F<>\"\\s{-}\\^⟨⟩`]+"

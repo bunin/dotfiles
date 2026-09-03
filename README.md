@@ -12,13 +12,56 @@ cd dotfiles
 ### ~/.config
 
 ```sh
-ln -sf "$PWD/.config/alacritty" ~/.config/alacritty
 ln -sf "$PWD/.config/mako" ~/.config/mako
 ln -sf "$PWD/.config/niri" ~/.config/niri
 ln -sf "$PWD/.config/nvim" ~/.config/nvim
 ln -sf "$PWD/.config/waybar" ~/.config/waybar
 ln -sf "$PWD/.config/xdg-desktop-portal" ~/.config/xdg-desktop-portal
 ```
+
+### ~/.config/alacritty
+
+Linked per file, not as a whole directory — `omarchy refresh config
+alacritty/alacritty.toml` copies Omarchy's default over this one and replaces
+the symlink with a regular file, and a directory link would hide that by letting
+the refresh write straight into the repo.
+
+```sh
+mkdir -p ~/.config/alacritty
+ln -sf "$PWD/.config/alacritty/alacritty.toml" ~/.config/alacritty/alacritty.toml
+```
+
+`alacritty.toml` is Omarchy's default with a `[hints]` block added, so the theme
+`general.import`, the font, and the CSI-u Return bindings stay as Omarchy ships
+them. Because it is the top-level config rather than an overlay, an `omarchy
+update` that changes the packaged default does not reach it — diff against
+`/usr/share/omarchy/config/alacritty/alacritty.toml` after updating.
+
+The hint puts a letter from `alphabet` on every URL on screen and opens the one
+you type, `CTRL+SHIFT+U`. Alacritty handles the binding before the foreground
+app sees it, so it works with herdr in front — but not before fcitx5, which is
+why `~/.config/fcitx5/conf/unicode.conf` above has to give the combo up; `Alt+click` in the same block does
+not, because herdr's `mouse_capture` claims the mouse. Opening goes through
+`omarchy-launch-browser`, which also focuses the browser window — `xdg-open`
+alone leaves that half undone.
+
+### ~/.config/fcitx5
+
+Linked per file — fcitx5 keeps `profile` and a generated `conf/cached_layouts`
+next to these, and Omarchy ships its own `conf/clipboard.conf` and
+`conf/xcb.conf` into the same directory.
+
+```sh
+mkdir -p ~/.config/fcitx5/conf
+ln -sf "$PWD/.config/fcitx5/conf/unicode.conf" ~/.config/fcitx5/conf/unicode.conf
+```
+
+`unicode.conf` clears one hotkey: the fcitx5 unicode addon takes
+`CTRL+SHIFT+U` for direct hex entry, and fcitx5 holds the Wayland
+input-method grab, so it got the key before Alacritty and the URL hint below
+never fired. Its other trigger, `CTRL+ALT+SHIFT+U`, stays. Apply it without a
+restart with `gdbus call --session --dest org.fcitx.Fcitx5 --object-path
+/controller --method org.fcitx.Fcitx.Controller1.ReloadAddonConfig unicode`.
 
 ### ~/.config/hypr
 
