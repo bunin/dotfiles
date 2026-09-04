@@ -101,6 +101,9 @@ tab_bar_right = [
   { type = "command", command = "~/.local/bin/herdr-clockify-status", interval_seconds = 1, timeout_seconds = 30 },
   { type = "command", command = "~/.local/bin/herdr-kube-status", interval_seconds = 5, timeout_seconds = 2 },
   { type = "hostname" },
+  # tmux had no clock; the datetime entry is a herdr built-in that redraws on
+  # the server, so it costs nothing next to the command entries above.
+  { type = "datetime", format = "%H:%M" },
 ]
 tab_bar_right_separator = " · "
 
