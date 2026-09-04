@@ -124,6 +124,39 @@ Herdr redraws the elapsed time every second, but the script refreshes Clockify
 at most once a minute and shows nothing when no timer runs. Herdr runs status
 commands asynchronously, so the occasional API refresh does not block its UI.
 
+`--json` prints the same timer as the Waybar-style object the Omarchy bar's
+`command` module expects, so the OS bar carries it beside the clock without a
+second Clockify poller — both readers share the one cache under
+`~/.cache/herdr-clockify`. The bar slot is narrow, so there the label is just
+the glyph and `H:MM`, with `project / description` in the tooltip.
+`~/.config/omarchy/shell.json` is not in this repo (the shell rewrites it
+whenever a bar gesture moves a widget), so the entry goes in by hand, ahead of
+`omarchy.clock` in `bar.layout.right`:
+
+```json
+{
+  "id": "clockify",
+  "type": "command",
+  "exec": "~/.local/bin/herdr-clockify-status --json",
+  "interval": 60,
+  "onClick": "omarchy-launch-or-focus-webapp clockify https://app.clockify.me/tracker"
+}
+```
+
+The bar drops the seconds and wakes once a minute because it runs `command`
+modules through `bash -lc`: the login shell costs more than the script it is
+there to run, and the module's timer keeps firing even while no timer is being
+tracked. Once a minute that is free, and it lands on the same cadence as the
+Clockify refresh anyway. Herdr keeps `H:MM:SS` — it redraws its own tab row and
+calls the script without a login shell.
+
+The module drops out of the bar on its own when no timer runs, because an empty
+`text` gives the widget no width. Nothing sets `class` to `active`: that paints
+the label in the theme's urgent color, and a running timer is the ordinary
+state. `omarchy-launch-or-focus-webapp` matches `clockify` against window
+classes and titles, so a click focuses an open tracker instead of stacking up
+another window.
+
 `herdr-kube-status` adds the current Kubernetes `context / namespace` beside the
 Clockify timer. It reads the local kubeconfig every five seconds without
 contacting the cluster, uses `default` when a context has no explicit namespace,

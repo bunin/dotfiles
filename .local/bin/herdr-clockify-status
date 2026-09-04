@@ -1,8 +1,20 @@
 #!/usr/bin/env bash
-# Clockify status for Herdr's tab bar. Clockify is polled at most once per TTL;
-# the elapsed time is rendered from the cached start time.
+# Clockify status for Herdr's tab bar and the Omarchy bar. Clockify is polled at
+# most once per TTL; the elapsed time is rendered from the cached start time.
+# Plain text by default; --json emits the Waybar-style object the Omarchy bar's
+# `command` module understands.
 
 set -u
+
+json=0
+case "${1:-}" in
+    --json) json=1 ;;
+    "") ;;
+    *)
+        printf 'usage: %s [--json]\n' "${0##*/}" >&2
+        exit 2
+        ;;
+esac
 
 CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/herdr-clockify"
 STATE="$CACHE_DIR/state"
@@ -78,5 +90,31 @@ fi
 
 d=$(( $(date +%s) - epoch ))
 [ "$d" -lt 0 ] && d=0
+h=$(( d / 3600 ))
+m=$(( d % 3600 / 60 ))
 
-printf '%s [%d:%02d:%02d]\n' "$label" $(( d / 3600 )) $(( d % 3600 / 60 )) $(( d % 60 ))
+if [ "$json" -eq 0 ]; then
+    printf '%s [%d:%02d:%02d]\n' "$label" "$h" "$m" $(( d % 60 ))
+    exit 0
+fi
+
+# The Omarchy bar slot is narrow, so the label carries only the glyph and the
+# elapsed time and the project / description ride along in the tooltip.
+#
+# Seconds are dropped here on purpose. The bar runs its `command` modules through
+# `bash -lc` and keeps the timer firing whether or not Clockify is tracking, so
+# the login shell it spawns costs more than this script does. At H:MM it only
+# needs waking once a minute, which is the Clockify refresh cadence above
+# anyway. Herdr keeps the seconds: it redraws its own tab row and calls this
+# script without a login shell.
+coarse=$(printf '%d:%02d' "$h" "$m")
+
+# Escaping stays in bash rather than jq: refresh() already stripped the newlines
+# out of the cached label, and this saves a process on every wake-up.
+escaped="$label [$coarse]"
+escaped=${escaped//\\/\\\\}
+escaped=${escaped//\"/\\\"}
+
+# No "class": "active" — that paints the label in the bar's urgent color, and a
+# running timer is the ordinary state, not an alarm.
+printf '{"text":" %s","tooltip":"%s"}\n' "$coarse" "$escaped"
