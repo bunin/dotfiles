@@ -134,6 +134,16 @@
             "command": "[ -n \"$TMUX_PANE\" ] && tmux set-window-option -u -t \"$TMUX_PANE\" @claude_waiting >/dev/null 2>&1 || true"
           }
         ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$HOME/.claude/hooks/herdr-agent-state.sh\" session",
+            "timeout": 10
+          }
+        ]
       }
     ]
   },
