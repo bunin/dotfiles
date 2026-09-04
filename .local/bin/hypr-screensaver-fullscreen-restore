@@ -1,0 +1,110 @@
+#!/bin/bash
+# Give back the fullscreen state that the Omarchy screensaver takes away.
+#
+# The screensaver is not an overlay, it is a real window (class
+# org.omarchy.screensaver) that Omarchy opens with a native `fullscreen` rule,
+# and Hyprland keeps a single fullscreen slot per workspace. Opening it drops
+# "Full width" (SUPER+ALT+F) or full screen (SUPER+F) from whatever window held
+# that slot, and dismissing it never hands the state back. Under the scrolling
+# layout the window then returns at scrolling:column_width, 0.49 -- half the
+# screen. Upstream bug: https://github.com/omacom/omarchy/issues/3218
+#
+# A window rule cannot undo this locally: rules are applied in order, so the
+# packaged `fullscreen = true` still runs and still steals the slot even when a
+# later rule turns it back off. So watch Hyprland's event socket instead, keep a
+# snapshot of every fullscreen window while the screensaver is down, and replay
+# it once the last screensaver window closes.
+#
+# Started from ~/.config/hypr/autostart.lua.
+set -uo pipefail
+
+readonly CLASS=org.omarchy.screensaver
+
+# Hyprland is chatty and a snapshot costs an IPC round trip, so take at most one
+# a second. The screensaver only ever appears after minutes of idle, by which
+# time the last snapshot is long settled.
+readonly SNAPSHOT_INTERVAL=1
+
+runtime="${XDG_RUNTIME_DIR:-/run/user/$UID}"
+
+socket="$runtime/hypr/${HYPRLAND_INSTANCE_SIGNATURE:-}/.socket2.sock"
+[[ -S $socket ]] || {
+  echo "hypr-screensaver-fullscreen-restore: no event socket at $socket" >&2
+  exit 1
+}
+
+# A second copy would replay the same snapshot twice, so let one hold the lock
+# for as long as it runs and have any other leave quietly.
+exec 9>"$runtime/hypr-screensaver-fullscreen-restore.lock"
+flock -n 9 || exit 0
+
+snapshot='[]'
+last_snapshot_at=-1
+declare -A screensaver_windows=()
+
+# Only windows actually holding a fullscreen state are worth remembering, and
+# the screensaver's own windows never are.
+take_snapshot() {
+  ((SECONDS - last_snapshot_at < SNAPSHOT_INTERVAL)) && return
+  last_snapshot_at=$SECONDS
+
+  local taken
+  taken=$(hyprctl clients -j 2>/dev/null | jq -c --arg c "$CLASS" '
+    [ .[]
+      | select(.class != $c)
+      | select((.fullscreen // 0) > 0 or (.fullscreenClient // 0) > 0)
+      | { address, fullscreen, fullscreenClient } ]' 2>/dev/null)
+
+  [[ -n $taken ]] && snapshot=$taken
+}
+
+# Restore by address rather than by focusing each window in turn: the typed
+# dispatcher takes a window argument, so the user's focus and the scrolling
+# layout's viewport stay where the screensaver left them.
+restore_snapshot() {
+  [[ $snapshot == '[]' ]] && return
+
+  local live address internal client
+  live=$(hyprctl clients -j 2>/dev/null) || return
+
+  while read -r address internal client; do
+    # The window may well have been closed while the screensaver was up.
+    jq -e --arg a "$address" 'any(.[]; .address == $a)' <<<"$live" >/dev/null || continue
+
+    hyprctl dispatch \
+      "hl.dsp.window.fullscreen_state({ internal = $internal, client = $client, window = \"address:$address\" })" \
+      >/dev/null 2>&1
+  done < <(jq -r '.[] | "\(.address) \(.fullscreen // 0) \(.fullscreenClient // 0)"' <<<"$snapshot")
+}
+
+take_snapshot
+
+# Event addresses come without the 0x that hyprctl reports, so normalise before
+# matching them against a snapshot.
+while IFS= read -r event; do
+  case $event in
+  openwindow\>\>*)
+    IFS=, read -r address _ class _ <<<"${event#openwindow>>}"
+    if [[ $class == "$CLASS" ]]; then
+      screensaver_windows[0x$address]=1
+    else
+      take_snapshot
+    fi
+    ;;
+  closewindow\>\>*)
+    address=0x${event#closewindow>>}
+    if [[ -n ${screensaver_windows[$address]:-} ]]; then
+      unset 'screensaver_windows[$address]'
+      # One screensaver window opens per monitor; wait for the last one.
+      ((${#screensaver_windows[@]} == 0)) && restore_snapshot
+    else
+      take_snapshot
+    fi
+    ;;
+  *)
+    # Any other event means the session is live rather than idle, so the
+    # fullscreen states seen now are the ones worth handing back later.
+    ((${#screensaver_windows[@]} == 0)) && take_snapshot
+    ;;
+  esac
+done < <(socat -U - "UNIX-CONNECT:$socket")
