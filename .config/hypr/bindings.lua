@@ -68,10 +68,41 @@ hl.unbind("SUPER + SHIFT + J")
 hl.unbind("SUPER + SHIFT + K")
 hl.unbind("SUPER + SHIFT + L")
 
+-- Omarchy's own workspace bindings, SUPER+TAB and SUPER+scroll included, pass
+-- Hyprland's "e+1" selector, which means "relative *open* workspace": it walks
+-- only the workspaces that already exist and wraps around them. On a fresh
+-- session with a single workspace there is nowhere to walk to, so the key does
+-- nothing and workspace 2 is never created. Stepping by ID creates the empty
+-- workspace on the way in.
+--
+-- The step is capped at workspace_count so J/K stay inside the range SUPER+1..5
+-- can jump to directly. The cap lifts to the current ID when that is already
+-- higher, so pressing J on workspace 8 holds there instead of jumping back.
+local workspace_count = 5
+
+local function workspace_step(delta, dispatch)
+  return function()
+    local active = hl.get_active_workspace()
+    local current = active and active.id or 1
+    local ceiling = math.max(workspace_count, current)
+    local target = math.min(ceiling, math.max(1, current + delta))
+
+    return hl.dispatch(dispatch(target))
+  end
+end
+
+local function focus_workspace(target)
+  return hl.dsp.focus({ workspace = target })
+end
+
+local function move_window_to_workspace(target)
+  return hl.dsp.window.move({ workspace = target })
+end
+
 o.bind("SUPER + H", "Focus on left window", hl.dsp.focus({ direction = "l" }))
 o.bind("SUPER + L", "Focus on right window", hl.dsp.focus({ direction = "r" }))
-o.bind("SUPER + J", "Next workspace", hl.dsp.focus({ workspace = "e+1" }))
-o.bind("SUPER + K", "Previous workspace", hl.dsp.focus({ workspace = "e-1" }))
+o.bind("SUPER + J", "Next workspace", workspace_step(1, focus_workspace))
+o.bind("SUPER + K", "Previous workspace", workspace_step(-1, focus_workspace))
 
 -- Omarchy's swap bindings, the arrow keys included, dispatch swapwindow, which
 -- belongs to the tiling layouts. Scrolling ignores it, and it refuses a
@@ -86,8 +117,8 @@ o.bind("SUPER + SHIFT + H", "Swap window to the left", hl.dsp.layout("swapcol l"
 o.bind("SUPER + SHIFT + L", "Swap window to the right", hl.dsp.layout("swapcol r"))
 o.bind("SUPER + SHIFT + LEFT", "Swap window to the left", hl.dsp.layout("swapcol l"))
 o.bind("SUPER + SHIFT + RIGHT", "Swap window to the right", hl.dsp.layout("swapcol r"))
-o.bind("SUPER + SHIFT + J", "Move window to next workspace", hl.dsp.window.move({ workspace = "e+1" }))
-o.bind("SUPER + SHIFT + K", "Move window to previous workspace", hl.dsp.window.move({ workspace = "e-1" }))
+o.bind("SUPER + SHIFT + J", "Move window to next workspace", workspace_step(1, move_window_to_workspace))
+o.bind("SUPER + SHIFT + K", "Move window to previous workspace", workspace_step(-1, move_window_to_workspace))
 
 -- The three Omarchy defaults that HJKL displaced, rehomed on SUPER+ALT.
 o.bind("SUPER + ALT + H", "Keybindings", "omarchy-menu-keybindings")
