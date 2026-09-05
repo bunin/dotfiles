@@ -19,6 +19,16 @@ ln -sf "$PWD/.config/waybar" ~/.config/waybar
 ln -sf "$PWD/.config/xdg-desktop-portal" ~/.config/xdg-desktop-portal
 ```
 
+### ~/.config/atuin
+
+Linked per file — atuin writes local machine receipts (`atuin-receipt.json`) next
+to the config that should stay out of the repo.
+
+```sh
+mkdir -p ~/.config/atuin
+ln -sf "$PWD/.config/atuin/config.toml" ~/.config/atuin/config.toml
+```
+
 ### ~/.config/alacritty
 
 Linked per file, not as a whole directory — `omarchy refresh config
