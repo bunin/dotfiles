@@ -37,8 +37,13 @@ the symlink with a regular file, and a directory link would hide that by letting
 the refresh write straight into the repo.
 
 ```sh
+# Linux
 mkdir -p ~/.config/alacritty
 ln -sf "$PWD/.config/alacritty/alacritty.toml" ~/.config/alacritty/alacritty.toml
+
+# macOS
+mkdir -p ~/.config/alacritty
+ln -sf "$PWD/.config/alacritty/alacritty.macos.toml" ~/.config/alacritty/alacritty.toml
 ```
 
 `alacritty.toml` is Omarchy's default with a `[hints]` block added, so the theme
@@ -46,6 +51,22 @@ ln -sf "$PWD/.config/alacritty/alacritty.toml" ~/.config/alacritty/alacritty.tom
 them. Because it is the top-level config rather than an overlay, an `omarchy
 update` that changes the packaged default does not reach it — diff against
 `/usr/share/omarchy/config/alacritty/alacritty.toml` after updating.
+
+`alacritty.macos.toml` is a whole config of its own rather than an overlay on the
+one above, because Alacritty reads a single top-level file and almost everything
+in Omarchy's differs here: the theme `general.import` names a path only Omarchy
+has, and the hint opens a URL with `open`, which focuses the browser the way
+`omarchy-launch-browser` does. It keeps `osc52` and the CSI-u Return bindings,
+and adds what only the Mac needs — a bootstrap `PATH`, a maximized startup, the
+shell that execs tmux, and the Monokai colours.
+
+Its font is a cask, and `brew.fish` runs Homebrew as the `homebrew` user under
+`sudo -H`, so a cask font lands in that user's `~/Library/Fonts` unless
+`--fontdir` says otherwise:
+
+```sh
+brew install --cask font-jetbrains-mono-nerd-font --fontdir=/Library/Fonts
+```
 
 The hint puts a letter from `alphabet` on every URL on screen and opens the one
 you type, `CTRL+SHIFT+U`. Alacritty handles the binding before the foreground

@@ -1,0 +1,81 @@
+# The macOS config. `alacritty.toml` beside it is Omarchy's Linux default, whose
+# font, size, and theme `general.import` mean nothing here - on a Mac link this
+# file as ~/.config/alacritty/alacritty.toml instead.
+
+[env]
+# Bootstrap PATH only — [env] cannot expand $HOME, so per-user dirs live in config.fish
+PATH = "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+
+[window]
+decorations = "None" # This might be default, but explicitly setting for clarity
+startup_mode = "Maximized"
+
+[terminal]
+osc52 = "CopyPaste"
+
+[terminal.shell]
+program = "/bin/sh"
+args = ["-c", "exec tmux new-session"]
+
+[font]
+size = 14.0
+normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
+italic = { family = "JetBrainsMono Nerd Font", style = "Italic" }
+bold = { family = "JetBrainsMono Nerd Font", style = "Bold" }
+bold_italic = { family = "JetBrainsMono Nerd Font", style = "Bold Italic" }
+
+[keyboard]
+bindings = [
+# Send Shift+Return as CSI-u so TUIs can distinguish it from Return without treating it as Alt+Return.
+{ key = "Return", mods = "Shift", chars = "\u001B[13;2u" },
+# Legacy encoding sends Alt+Shift+Return the same as Alt+Return; send CSI-u so tmux can match M-S-Enter.
+{ key = "Return", mods = "Alt|Shift", chars = "\u001B[13;4u" }
+]
+
+# Colours (Monokai Charcoal)
+
+# Default Colours
+[colors.primary]
+background = '#000000'
+foreground = '#FFFFFF'
+
+# Normal Colours
+[colors.normal]
+black   = '#1a1a1a'
+red     = '#f4005f'
+green   = '#98e024'
+yellow  = '#fa8419'
+blue    = '#9d65ff'
+magenta = '#f4005f'
+cyan    = '#58d1eb'
+white   = '#c4c5b5'
+
+# Bright Colours
+[colors.bright]
+black   = '#625e4c'
+red     = '#f4005f'
+green   = '#98e024'
+yellow  = '#e0d561'
+blue    = '#9d65ff'
+magenta = '#f4005f'
+cyan    = '#58d1eb'
+white   = '#f6f6ef'
+
+[bell]
+animation = "EaseOut"
+duration = 60 # set to 0 to disable the flash entirely
+color = '#625e4c'
+
+[hints]
+alphabet = "jksdhfgali"
+
+[[hints.enabled]]
+# `open` both opens the URL and focuses the browser; the old command here called
+# a ~/.config/niri script that the move to Hyprland left behind.
+command = "open"
+hyperlinks = true
+post_processing = true
+persist = false
+mouse = { enabled = true, mods = "Alt" }
+binding = { key = "U", mods = "Control|Shift" }
+regex = "(mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)[^\\u0000-\\u001F\\u007F-\\u009F<>\"\\s{-}\\^⟨⟩`]+"
