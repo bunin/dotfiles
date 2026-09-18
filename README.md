@@ -436,7 +436,10 @@ mkdir -p ~/.gemini/antigravity-cli
 ln -sf "$PWD/.gemini/antigravity-cli/settings.json" ~/.gemini/antigravity-cli/settings.json
 ```
 
-`omarchy-agent-usage-antigravity` automatically preserves `"notifications": false`
-and maintains this symlink whenever it queries `agy --print '/quota'`, working
-around Go's `omitempty` serialization bug.
+`omarchy-agent-usage-antigravity` automatically preserves the settings whose
+value is `false` — `"notifications"` and `"enableTelemetry"` — and maintains
+this symlink whenever it queries `agy --print '/quota'`, working around Go's
+`omitempty` serialization bug. It re-inserts them with `jq` after agy has
+dropped them, which is why both sit at the end of the file rather than in agy's
+own key order.
 

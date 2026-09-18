@@ -1,6 +1,5 @@
 {
   "allowNonWorkspaceAccess": true,
-  "enableTelemetry": false,
   "permissions": {
     "allow": [
       "read_url(antigravity.google)",
@@ -26,5 +25,6 @@
     "/home/bunin",
     "/home/bunin/Projects/bunin/dotfiles"
   ],
-  "notifications": false
+  "notifications": false,
+  "enableTelemetry": false
 }
