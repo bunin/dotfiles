@@ -128,3 +128,8 @@ o.bind("SUPER + ALT + L", "Toggle workspace layout", "omarchy-hyprland-workspace
 -- Close active window (alongside default SUPER+W)
 o.bind("SUPER + Q", "Close window", hl.dsp.window.close())
 
+
+-- Cycle keyboard layouts (us <-> ru, configured in input.lua). "all" applies
+-- the switch to every keyboard device at once, so an external keyboard does not
+-- drift out of sync with the laptop's.
+o.bind("CTRL + ALT + SPACE", "Switch keyboard layout", "hyprctl switchxkblayout all next")
