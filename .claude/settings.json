@@ -169,7 +169,6 @@
     "superpowers@claude-plugins-official": true,
     "telegram@claude-plugins-official": true
   },
-  "theme": "dark",
   "language": "russian",
   "spinnerTipsEnabled": true,
   "tui": "fullscreen",
@@ -178,13 +177,14 @@
     "mode": "hold"
   },
   "prefersReducedMotion": true,
+  "theme": "dark",
   "editorMode": "vim",
   "verbose": true,
+  "preferredNotifChannel": "terminal_bell",
   "autoCompactEnabled": false,
   "teammateMode": "tmux",
   "remoteControlAtStartup": false,
+  "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
-  "voiceEnabled": true,
-  "preferredNotifChannel": "terminal_bell",
-  "inputNeededNotifEnabled": true
+  "voiceEnabled": true
 }
