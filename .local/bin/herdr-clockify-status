@@ -71,11 +71,20 @@ refresh() {
     mv -f "$tmp" "$STATE"
 }
 
-now=$(date +%s)
-state_age=$(( now - $(mtime "$STATE") ))
-attempt_age=$(( now - $(mtime "$ATTEMPT") ))
-if { [ ! -f "$STATE" ] || [ "$state_age" -ge "$TTL" ]; } &&
-   { [ ! -f "$ATTEMPT" ] || [ "$attempt_age" -ge "$TTL" ]; }; then
+# A cache file dated in the future means the clock moved backwards after the
+# cache was written: the RTC runs fast at boot, this script caches whatever
+# Clockify said before the network was up, and NTP corrects the clock later. The
+# age is negative from then on, never reaches the TTL, and the stale state --
+# usually `idle`, since the first run raced the network -- would stick for the
+# rest of the session, so count a future timestamp as stale too.
+stale() {
+    local age
+    [ -f "$1" ] || return 0
+    age=$(( $(date +%s) - $(mtime "$1") ))
+    [ "$age" -ge "$TTL" ] || [ "$age" -lt 0 ]
+}
+
+if stale "$STATE" && stale "$ATTEMPT"; then
     # Herdr already runs status commands asynchronously and prevents overlap.
     # Keep this request in the foreground: Herdr kills background descendants
     # when the command exits. The attempt timestamp also throttles timeouts.
