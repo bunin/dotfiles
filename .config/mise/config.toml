@@ -5,8 +5,16 @@ codex = "latest"
 copilot = "latest"
 gh = "latest"
 "github:can1357/oh-my-pi" = "latest"
+"github:chronologos/cc-sessions" = "latest"
+go = "latest"
+k9s = "latest"
 kubectl = "latest"
 kubectx = "latest"
 kubens = "latest"
 node = "26.8.1"
 "npm:@xai-official/grok" = "latest"
+pi = "latest"
+stern = "latest"
+
+[settings.upgrade]
+auto_prune = false
