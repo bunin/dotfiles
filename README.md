@@ -356,6 +356,41 @@ mise install
 
 `node` names an exact version on purpose. Everything else tracks `latest`.
 
+### ~/.config/systemd
+
+Linked as a whole directory — nothing but this drop-in belongs in
+`app-.scope.d`, and systemd's own user units live a level up in
+`~/.config/systemd/user`, outside the link.
+
+```sh
+mkdir -p ~/.config/systemd/user
+ln -sfn "$PWD/.config/systemd/user/app-.scope.d" ~/.config/systemd/user/app-.scope.d
+systemctl --user daemon-reload
+```
+
+`app-.scope.d/50-cpu-weight.conf` gives every app scope a CPU share of its own.
+systemd delegates a controller into a slice only once some unit inside it asks
+for that controller, and nothing under `app.slice` had ever named a CPU
+property — so `app.slice` carried `memory pids` in `cgroup.subtree_control`
+with no `cpu`, and every window competed as one flat pool of threads. A `go
+test ./...` and two `golangci-lint` runs in the agent terminal put dozens of
+runnable compilers against Slack's handful of renderer threads at the same
+nice level, and Slack went to molasses while Hyprland itself stayed smooth —
+`session.slice` does hold a `cpu.weight` against `app.slice`, so the
+starvation was entirely inside `app.slice`.
+
+Naming the weight, even at systemd's own default of 100, is what turns the cpu
+controller on in `app.slice`, so the share is divided per window rather than
+per thread. Measured with 27 runnable threads on 12: a busy process sharing
+the terminal's scope got 47% of a core, the same process in a scope of its own
+got 99%.
+
+The directory name is the dash-truncated form systemd searches for
+`app-Hyprland-<app>-<hash>.scope`, so it covers every app Hyprland launches
+without naming any of them — the hash changes each launch, and the terminal
+and Slack both come through as `gtk-launch`, so there is nothing stabler to
+match on. `daemon-reload` applies it to scopes that are already running.
+
 ### Vale
 
 Linked per file, not as a whole directory — Vale writes downloaded packages
