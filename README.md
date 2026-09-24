@@ -433,6 +433,27 @@ Then download the styles the config references:
 vale sync
 ```
 
+#### Commit message hook
+
+A `commit-msg` hook runs Vale over every commit message and blocks the commit on
+errors. Warnings and suggestions only print.
+
+```sh
+mkdir -p ~/.config/git
+ln -sf "$PWD/.config/git/hooks" ~/.config/git/hooks
+git config --global core.hooksPath ~/.config/git/hooks
+```
+
+The hook copies the message to a `*.gitcommit` file before linting, because
+`.vale.ini` maps that extension to the commit rules — they treat trailers such as
+`Co-Authored-By` as metadata rather than prose, and add checks that only apply to
+commit messages. Linting `COMMIT_EDITMSG` directly picks up the Markdown rules
+instead and gets both halves wrong.
+
+`core.hooksPath` replaces per-repository hooks everywhere, so a repo that ships
+its own `.git/hooks` stops running them once this is set. Skip the check for a
+single commit with `git commit --no-verify`.
+
 ### ~/.claude
 
 ```sh

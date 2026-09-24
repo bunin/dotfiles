@@ -1,0 +1,24 @@
+#!/bin/sh
+# Lint the commit message with vale, blocking only on errors.
+#
+# The message is copied to a file named *.gitcommit so vale applies the commit
+# rules from .vale.ini instead of the Markdown ones: those know that trailers
+# like Co-Authored-By are not prose, and they carry checks that only make sense
+# for commit messages.
+
+command -v vale >/dev/null 2>&1 || exit 0
+
+dir=$(mktemp -d) || exit 0
+trap 'rm -rf "$dir"' EXIT
+
+msg="$dir/COMMIT_EDITMSG.gitcommit"
+
+# drop the comment block git appends, which is not part of the message
+grep -v '^#' "$1" > "$msg"
+
+if ! vale --minAlertLevel=error "$msg"; then
+	echo
+	echo "vale found errors in the commit message." >&2
+	echo "Fix them, or run git commit --no-verify to skip this check." >&2
+	exit 1
+fi
