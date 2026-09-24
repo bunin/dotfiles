@@ -14,8 +14,10 @@ startup_mode = "Maximized"
 osc52 = "CopyPaste"
 
 [terminal.shell]
-program = "/bin/sh"
-args = ["-c", "exec tmux new-session"]
+# A bare name, not a path: resolved on PATH, same reasoning as herdr's
+# default_shell below - $SHELL is whatever started Alacritty, not necessarily
+# the login shell.
+program = "fish"
 
 [font]
 size = 14.0

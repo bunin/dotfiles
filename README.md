@@ -57,8 +57,9 @@ one above, because Alacritty reads a single top-level file and almost everything
 in Omarchy's differs here: the theme `general.import` names a path only Omarchy
 has, and the hint opens a URL with `open`, which focuses the browser the way
 `omarchy-launch-browser` does. It keeps `osc52` and the CSI-u Return bindings,
-and adds what only the Mac needs — a bootstrap `PATH`, a maximized startup, the
-shell that execs tmux, and the Monokai colours.
+and adds what only the Mac needs — a bootstrap `PATH`, a maximized startup, a
+`terminal.shell` naming fish outright (same reasoning as herdr's
+`default_shell` below), and the Monokai colours.
 
 Its font is a cask, and `brew.fish` runs Homebrew as the `homebrew` user under
 `sudo -H`, so a cask font lands in that user's `~/Library/Fonts` unless
@@ -254,6 +255,8 @@ ln -sf "$PWD/.config/fish/functions/vi.fish" ~/.config/fish/functions/vi.fish
 ln -sf "$PWD/.config/fish/functions/k.fish" ~/.config/fish/functions/k.fish
 ln -sf "$PWD/.config/fish/functions/kc.fish" ~/.config/fish/functions/kc.fish
 ln -sf "$PWD/.config/fish/functions/kn.fish" ~/.config/fish/functions/kn.fish
+ln -sf "$PWD/.config/fish/functions/t.fish" ~/.config/fish/functions/t.fish
+ln -sf "$PWD/.config/fish/functions/h.fish" ~/.config/fish/functions/h.fish
 ```
 
 `brew.fish` runs Homebrew as the dedicated `homebrew` user. `-H` points `HOME` at
@@ -280,6 +283,12 @@ kubectl completion fish > ~/.config/fish/completions/kubectl.fish
 
 The kubectx and kubens tarballs don't carry fish completions, so `kc` and `kn`
 complete nothing. Both list their choices when run bare.
+
+`t.fish` and `h.fish` are shorthands for `tmux` and `herdr` — functions rather
+than aliases so `--wraps` carries each program's own completions through.
+Alacritty's `terminal.shell` no longer execs tmux on its own (see
+`~/.config/alacritty` above), so panes open in a plain shell and picking a
+multiplexer is one letter away.
 
 ### ~/.config/bash
 
