@@ -327,6 +327,14 @@ and functions here":
 [[ -r ~/.config/bash/env.bash ]] && source ~/.config/bash/env.bash
 ```
 
+A login bash — what ssh starts — reads `~/.bash_profile` or `~/.profile` and
+skips `~/.bashrc`. Arch's stock `~/.bash_profile` sources `~/.bashrc` already; on
+macOS, where only `~/.profile` exists, add this to its end:
+
+```sh
+[ -n "$BASH_VERSION" ] && [ -r ~/.bashrc ] && . ~/.bashrc
+```
+
 A bash started outside a fish session — from a graphical launcher, say — never
 sees `BASH_ENV`, so the functions reach it only if it happens to be interactive.
 
