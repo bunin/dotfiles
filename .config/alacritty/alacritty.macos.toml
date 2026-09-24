@@ -20,7 +20,7 @@ osc52 = "CopyPaste"
 program = "fish"
 
 [font]
-size = 14.0
+size = 16.0
 normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
 italic = { family = "JetBrainsMono Nerd Font", style = "Italic" }
 bold = { family = "JetBrainsMono Nerd Font", style = "Bold" }
