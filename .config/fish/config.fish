@@ -4,7 +4,7 @@ for dir in $HOME/.docker/bin $HOME/go/bin $HOME/.lmstudio/bin
     test -d $dir; and not contains -- $dir $PATH; and set -gx PATH $PATH $dir
 end
 
-for dir in $HOME/.local/bin $HOME/.opencode/bin
+for dir in $HOME/.local/bin $HOME/.local/share/mise/shims $HOME/.opencode/bin
     test -d $dir; and not contains -- $dir $PATH; and set -gx PATH $dir $PATH
 end
 
@@ -12,7 +12,11 @@ end
 set -gx PNPM_HOME $HOME/Library/pnpm
 test -d $PNPM_HOME; and not contains -- $PNPM_HOME $PATH; and set -gx PATH $PNPM_HOME $PATH
 
-# mise lives in ~/.local/bin, prepended just above.
+# mise lives in ~/.local/bin, prepended just above. The shims directory goes on
+# PATH alongside it so the tools survive the handoff to a child process: this
+# activation is fish-only, but PATH is exported, so a `bash -c` started from here
+# still resolves kubectl and friends. Activation runs after the loop, putting the
+# real tool paths ahead of the shims, so fish itself never pays the shim hop.
 command -q mise; and mise activate fish | source
 
 if status is-interactive

@@ -305,8 +305,8 @@ so any bash descended from a fish shell picks the functions up; `~/.bashrc`
 sources the same `env.bash` for interactive shells, which ignore `BASH_ENV`.
 
 That makes `env.bash` run ahead of every bash script this session starts, so
-keep it silent, quick, and free of side effects — definitions only, no output,
-no PATH edits, no `set -e`. It ends in `true` because a trailing failed test
+keep it silent, quick, and free of side effects — no output, no `set -e`, and
+no PATH edit that is not guarded against repeating itself. It ends in `true` because a trailing failed test
 would otherwise become the script's starting exit status. Twenty `bash -c true`
 runs took the same 27ms with it as without.
 
