@@ -243,8 +243,7 @@ server. Panes that are already open keep the shell they started with.
 ### ~/.config/fish
 
 Linked per file, not as a whole directory — fish writes generated state next to
-these (`fish_variables`, `completions/`, `conf.d/omf.fish`) that should stay out
-of the repo.
+these (`fish_variables`, `completions/`) that should stay out of the repo.
 
 ```sh
 mkdir -p ~/.config/fish/functions ~/.config/fish/conf.d
