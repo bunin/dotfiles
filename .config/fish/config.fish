@@ -27,6 +27,8 @@ end
 
 if status is-interactive
     atuin init fish | source
+    # Omarchy's conf.d/omarchy.fish already did this; running it twice is harmless.
+    command -q starship; and starship init fish | source
 end
 
 # Non-interactive bash reads no startup file on its own, so `k`/`kc`/`kn` would

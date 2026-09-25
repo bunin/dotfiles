@@ -311,8 +311,18 @@ Plain `mise upgrade` keeps the wait.
 ln -sf "$PWD/.config/starship.toml" ~/.config/starship.toml
 ```
 
-The prompt. `conf.d/omarchy.fish` runs `starship init fish`, the same way
-Omarchy's bash init does. The file is the `jetpack` preset
+The prompt, installed through mise. `config.fish` runs `starship init fish`.
+On Omarchy, `conf.d/omarchy.fish` and Omarchy's bash init already run it too,
+so it runs twice there, which does no harm. On macOS, bash and zsh need one line
+each, at the end of `~/.bashrc` and `~/.zshrc`. In `~/.zshrc`, also set
+`ZSH_THEME=""` so oh-my-zsh stops drawing its own prompt:
+
+```sh
+command -v starship >/dev/null && eval "$(starship init bash)"  # ~/.bashrc
+command -v starship >/dev/null && eval "$(starship init zsh)"   # ~/.zshrc
+```
+
+The file is the `jetpack` preset
 (`starship preset jetpack`) with two sections appended at the end. Diff it
 against the preset after a Starship upgrade.
 

@@ -16,6 +16,7 @@ kubens = "latest"
 node = "26.8.1"
 "npm:@xai-official/grok" = "latest"
 pi = "latest"
+starship = "latest"
 stern = "latest"
 
 [settings.upgrade]
