@@ -247,8 +247,9 @@ these (`fish_variables`, `completions/`, `conf.d/omf.fish`) that should stay out
 of the repo.
 
 ```sh
-mkdir -p ~/.config/fish/functions
+mkdir -p ~/.config/fish/functions ~/.config/fish/conf.d
 ln -sf "$PWD/.config/fish/config.fish" ~/.config/fish/config.fish
+ln -sf "$PWD/.config/fish/conf.d/herdr-tab-name.fish" ~/.config/fish/conf.d/herdr-tab-name.fish
 ln -sf "$PWD/.config/fish/functions/brew.fish" ~/.config/fish/functions/brew.fish
 ln -sf "$PWD/.config/fish/functions/vim.fish" ~/.config/fish/functions/vim.fish
 ln -sf "$PWD/.config/fish/functions/vi.fish" ~/.config/fish/functions/vi.fish
@@ -283,6 +284,16 @@ kubectl completion fish > ~/.config/fish/completions/kubectl.fish
 
 The kubectx and kubens tarballs don't carry fish completions, so `kc` and `kn`
 complete nothing. Both list their choices when run bare.
+
+`conf.d/herdr-tab-name.fish` names each herdr tab `<position>:<command>` after
+the last command started in it, the way tmux's `#I:#W` with automatic-rename
+did. herdr has no such option, so a `fish_preexec` handler calls `herdr tab
+rename` on the pane's own `$HERDR_TAB_ID`. Wrappers such as `sudo` and `env`
+are skipped, so `sudo pacman -Syu` names the tab `pacman`. A name set by hand
+(anything other than a bare number or `<number>:<word>`) is left alone, which
+turns the automatic naming off for that tab as a tmux rename did. Positions are
+read when a command starts, so after a tab closes or moves, the numbers of the
+others catch up on their next command. Outside herdr the file does nothing.
 
 `t.fish` and `h.fish` are shorthands for `tmux` and `herdr` — functions rather
 than aliases so `--wraps` carries each program's own completions through.
