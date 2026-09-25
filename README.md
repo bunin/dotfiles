@@ -290,6 +290,25 @@ Alacritty's `terminal.shell` no longer execs tmux on its own (see
 `~/.config/alacritty` above), so panes open in a plain shell and picking a
 multiplexer is one letter away.
 
+### ~/.config/starship.toml
+
+```sh
+ln -sf "$PWD/.config/starship.toml" ~/.config/starship.toml
+```
+
+The prompt. `conf.d/omarchy.fish` runs `starship init fish`, the same way
+Omarchy's bash init does. The file is the `jetpack` preset
+(`starship preset jetpack`) with two sections appended at the end. Diff it
+against the preset after a Starship upgrade.
+
+- `[kubernetes]` turns on the module that jetpack already places in
+  `right_format`, so the right side shows the current context and namespace.
+- `[gcloud]` is disabled because it prints the active account's email, which
+  shows up in screenshots and screen shares.
+
+Omarchy ships its own `starship.toml`, and `omarchy refresh config
+starship.toml` would copy it over this link.
+
 ### ~/.config/bash
 
 fish is the login shell; bash is what an ssh session, a rescue console, or a
