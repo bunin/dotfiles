@@ -167,7 +167,8 @@
     "rust-analyzer-lsp@claude-plugins-official": true,
     "slack@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true,
-    "telegram@claude-plugins-official": true
+    "telegram@claude-plugins-official": true,
+    "swift-lsp@claude-plugins-official": true
   },
   "language": "russian",
   "spinnerTipsEnabled": true,
