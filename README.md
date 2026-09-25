@@ -258,6 +258,7 @@ ln -sf "$PWD/.config/fish/functions/kc.fish" ~/.config/fish/functions/kc.fish
 ln -sf "$PWD/.config/fish/functions/kn.fish" ~/.config/fish/functions/kn.fish
 ln -sf "$PWD/.config/fish/functions/t.fish" ~/.config/fish/functions/t.fish
 ln -sf "$PWD/.config/fish/functions/h.fish" ~/.config/fish/functions/h.fish
+ln -sf "$PWD/.config/fish/functions/mup.fish" ~/.config/fish/functions/mup.fish
 ```
 
 `brew.fish` runs Homebrew as the dedicated `homebrew` user. `-H` points `HOME` at
@@ -300,6 +301,10 @@ than aliases so `--wraps` carries each program's own completions through.
 Alacritty's `terminal.shell` no longer execs tmux on its own (see
 `~/.config/alacritty` above), so panes open in a plain shell and picking a
 multiplexer is one letter away.
+
+`mup.fish` is Omarchy's `mup`: `mise upgrade` with `MISE_MINIMUM_RELEASE_AGE=0`,
+so it takes releases mise would otherwise hold back for its default 24 hours.
+Plain `mise upgrade` keeps the wait.
 
 ### ~/.config/starship.toml
 
