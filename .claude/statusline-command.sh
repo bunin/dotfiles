@@ -1,8 +1,56 @@
 #!/bin/sh
 input=$(cat)
 cwd=$(echo "$input" | jq -r '.cwd')
-model=$(echo "$input" | jq -r '.model.display_name // empty')
-printf '\033[01;32m%s@%s\033[00m:\033[01;34m%s\033[00m' "$(whoami)" "$(hostname -s)" "$cwd"
+# The context size in the name repeats what the context block shows.
+model=$(echo "$input" | jq -r '.model.display_name // empty' | sed 's/^Claude //; s/ *([^)]*context)$//')
+# Shortened like fish's prompt_pwd: ~ for $HOME, every directory but the last
+# cut to its first character (two for dot-directories).
+short_cwd=$(printf '%s' "$cwd" | awk -v home="$HOME" '{
+  if ($0 == home) { print "~"; exit }
+  if (index($0, home "/") == 1) $0 = "~" substr($0, length(home) + 1)
+  n = split($0, p, "/")
+  for (i = 1; i < n; i++) if (p[i] != "") p[i] = substr(p[i], 1, substr(p[i], 1, 1) == "." ? 2 : 1)
+  out = p[1]
+  for (i = 2; i <= n; i++) out = out "/" p[i]
+  print out
+}')
+printf '\033[01;34m%s\033[00m' "$short_cwd"
+
+# --no-optional-locks keeps this from racing a git command running in the repo.
+git_info=$(git --no-optional-locks -C "$cwd" status --porcelain=v2 --branch 2>/dev/null | awk '
+  /^# branch.oid/  { oid = substr($3, 1, 7) }
+  /^# branch.head/ { head = $3 }
+  /^# branch.ab/   { ahead = substr($3, 2) + 0; behind = substr($4, 2) + 0 }
+  /^[12] / { if (substr($2, 1, 1) != ".") staged++; if (substr($2, 2, 1) != ".") modified++ }
+  /^u /    { conflicted++ }
+  /^\? /   { untracked++ }
+  END {
+    if (head == "") exit
+    # The same symbols as the jetpack preset in starship.toml.
+    if (ahead && behind) st = "◇ ▴┤" ahead "│▿┤" behind "│"
+    else if (ahead) st = "▴│" ahead "│"
+    else if (behind) st = "▿│" behind "│"
+    if (staged) st = st "▪┤" staged "│"
+    if (modified) st = st "●◦"
+    if (untracked) st = st "◌◦"
+    if (conflicted) st = st "◪◦"
+    out = (head == "(detached)") ? oid : head
+    if (st != "") out = out " ⎪" st "⎥"
+    print out
+  }')
+[ -n "$git_info" ] && printf ' \033[00;32m%s\033[00m' "$git_info"
+
+if command -v kubectl >/dev/null 2>&1; then
+  kube=$(kubectl config view --minify -o 'jsonpath={.current-context}{"\t"}{..namespace}' 2>/dev/null)
+  kube_ctx=${kube%%"	"*}
+  kube_ns=${kube#*"	"}
+  if [ -n "$kube_ctx" ]; then
+    printf ' \033[00;94m⎈ %s' "$kube_ctx"
+    [ -n "$kube_ns" ] && printf ' (%s)' "$kube_ns"
+    printf '\033[00m'
+  fi
+fi
+
 [ -n "$model" ] && printf ' \033[00;35m[%s]\033[00m' "$model"
 
 ctx_pct=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
